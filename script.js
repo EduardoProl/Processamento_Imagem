@@ -1,7 +1,11 @@
-// Toggle the navigation menu
+// Toggle the side navigation menu
 document.getElementById('menuButton').addEventListener('click', () => {
-    const navLinks = document.getElementById('navLinks');
-    navLinks.classList.toggle('hidden');
+    const sideNav = document.getElementById('sideNav');
+    if (sideNav.classList.contains('open')) {
+        sideNav.classList.remove('open');
+    } else {
+        sideNav.classList.add('open');
+    }
 });
 
 // Smooth scroll to the code section

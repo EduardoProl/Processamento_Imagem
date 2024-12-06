@@ -5,53 +5,63 @@
     box-sizing: border-box;
 }
 
+/* Dark Theme */
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+}
+
 /* Header */
 header {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #1f1f1f;
+    color: #e0e0e0;
     padding: 10px 20px;
     text-align: center;
+    border-bottom: 1px solid #333;
 }
 
 /* Navigation */
 nav {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
     position: relative;
 }
 
 nav #menuButton {
     background: none;
     border: none;
-    color: white;
-    font-size: 1.2em;
+    color: #e0e0e0;
+    font-size: 1.5em;
+    padding: 10px;
     cursor: pointer;
 }
 
-nav #navLinks {
+#sideNav {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #1f1f1f;
+    overflow: auto;
+    transition: left 0.3s;
     display: flex;
     flex-direction: column;
-    position: absolute;
-    top: 50px;
-    left: 10px;
-    background-color: #444;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 20px;
 }
 
-nav #navLinks.hidden {
-    display: none;
-}
-
-nav a {
-    color: white;
+#sideNav a {
+    color: #e0e0e0;
     text-decoration: none;
-    padding: 5px 0;
+    margin: 10px 0;
+    font-size: 1.2em;
 }
 
-nav a:hover {
+#sideNav a:hover {
     text-decoration: underline;
+}
+
+#sideNav.open {
+    left: 0;
 }
 
 /* Main Content */
@@ -71,9 +81,10 @@ main {
     max-width: 800px;
     height: 60vh;
     margin: 20px auto;
-    border: 2px solid #ccc;
+    border: 2px solid #333;
     border-radius: 5px;
     overflow: hidden;
+    background-color: #1e1e1e;
 }
 
 textarea#codeBox {
@@ -84,6 +95,8 @@ textarea#codeBox {
     padding: 10px;
     font-size: 1rem;
     font-family: monospace;
+    color: #e0e0e0;
+    background-color: #1e1e1e;
     overflow-y: auto;
 }
 
