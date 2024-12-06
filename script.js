@@ -33,18 +33,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Inicializando o CodeMirror para cada textarea
+    const textareas = document.querySelectorAll('.codeBox');
+    const editors = Array.from(textareas).map((textarea) => 
+        CodeMirror.fromTextArea(textarea, {
+            lineNumbers: true,
+            mode: "python", // Defina o modo de sintaxe (exemplo: Python)
+            theme: "dracula", // Escolha um tema (exemplo: dracula)
+            readOnly: true, // Torna o editor somente leitura
+        })
+    );
+
     // Copiar código para a área de transferência
     const copyButtons = document.querySelectorAll('.copyButton'); // Agora pegamos todos os botões com a classe .copyButton
 
-    copyButtons.forEach(button => {
+    copyButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
-            const codeBox = button.previousElementSibling; // Pega o textarea correspondente ao botão
-            navigator.clipboard.writeText(codeBox.value) // Copia o texto da caixa de código
+            const code = editors[index].getValue(); // Pega o valor do editor correspondente
+            navigator.clipboard.writeText(code) // Copia o texto do editor
                 .then(() => {
-                    alert('Code copied to clipboard!'); // Alerta de sucesso
+                    alert('Copiado!'); // Alerta de sucesso
                 })
                 .catch(err => {
-                    console.error('Failed to copy text:', err); // Log de erro
+                    console.error('Erro a copiar:', err); // Log de erro
                 });
         });
     });

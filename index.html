@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
+<!-- Incluir CSS e JS do CodeMirror -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/theme/dracula.min.css"> <!-- Tema escuro -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/mode/python/python.min.js"></script> <!-- Para destacar Python -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,71 +24,117 @@
 
     <!-- Side Navigation -->
     <div id="sideNav">
-      <a href="#codeSection">Code</a>
-      <a href="#codeSection1">Code</a>
-      <a href="#codeSection2">Code</a>
-      <a href="#codeSection3">Code</a>
-      <a href="#codeSection4">Code</a>
+        <a href="#codeSection">Centroides</a>
+        <a href="#codeSection1">Momentos Centrados</a>
+        <a href="#codeSection2">Orientação</a>
+        <a href="#codeSection3">Desenhar linha com base no angulo</a>
+        <a href="#codeSection4">Excentricidade</a>
     </div>
 
     <main>
-        <section id="codeSection">
-            <h2>Your Code</h2>
+        <section id="Abrir imagens">
+            <h2>Abrir Imagens</h2>
             <div class="code-container">
-                <textarea class="codeBox" readonly>
-# Example code
-def hello_world():
-    print("Hello, World!")
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox3" class="codeBox">
+img = plt.imread("../imagens/imagem_a.jpg")
                 </textarea>
-                <button class="copyButton">Copy Code</button>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+        <section id="codeSection">
+            <h2>Centroides</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox1" class="codeBox">def centroide(imagem_hex):
+M00 = M01 = M10 = 0
+
+for i in range(imagem_hex.shape[0]):
+    for j in range(imagem_hex.shape[1]):
+        M00 += imagem_hex[i, j]
+        M01 += (imagem_hex[i, j] * j)
+        M10 += (imagem_hex[i, j] * i)
+return M01 / M00, M10 / M00
+                </textarea>
+                <button class="copyButton">Copiar</button>
             </div>
         </section>
 
         <section id="codeSection1">
-            <h2>Your Code 1</h2>
+            <h2>Momentos Centrados</h2>
             <div class="code-container">
-                <textarea class="codeBox" readonly>
-# Example code
-def hello_world():
-    print("Hello, World!")
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox2" class="codeBox">def momentos_centrados(img):
+"""Calcula os momentos centrais de segunda ordem mu11, mu02, mu20."""
+y, x = centroide(img)
+mu11 = mu02 = mu20 = 0
+for i in range(img.shape[0]):
+    for j in range(img.shape[1]):
+        mu11 += (i - x) * (j - y) * img[i, j]
+        mu02 += (i - y) ** 2 * img[i, j]
+        mu20 += (j - x) ** 2 * img[i, j]
+return mu11, mu02, mu20
                 </textarea>
-                <button class="copyButton">Copy Code</button>
+                <button class="copyButton">Copiar</button>
             </div>
         </section>
 
         <section id="codeSection2">
-            <h2>Your Code 2</h2>
+            <h2>Orientação</h2>
             <div class="code-container">
-                <textarea class="codeBox" readonly>
-# Example code
-def hello_world():
-    print("Hello, World!")
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox3" class="codeBox">def calcular_orientacao(img):
+    mu11, mu02, mu20 = momentos_centrados(img)
+    # Calcular a orientação (em radianos)
+    theta = 0.5 * np.arctan2(2 * mu11, (mu20 - mu02))
+    return np.degrees(theta) # Retorna a orientação em graus
                 </textarea>
-                <button class="copyButton">Copy Code</button>
+                <button class="copyButton">Copiar</button>
             </div>
         </section>
 
         <section id="codeSection3">
-            <h2>Your Code 3</h2>
+            <h2>Desenhar linha com base no angulo</h2>
             <div class="code-container">
-                <textarea class="codeBox" readonly>
-# Example code
-def hello_world():
-    print("Hello, World!")
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox4" class="codeBox">def desenhar_linha(x, y, theta, comprimento=150, cor='red'):
+    # Convertendo ângulo para radianos
+    theta_rad = np.radians(theta)
+    
+   # Calculando os componentes de deslocamento da seta (dx, dy)
+    dx = comprimento * np.cos(theta_rad)
+    dy = -comprimento * np.sin(theta_rad)  
+    # Desenhando a seta com plt.arrow
+    plt.arrow(x, y, dx, dy, head_width=15, head_length=10, fc=cor, ec=cor)
                 </textarea>
-                <button class="copyButton">Copy Code</button>
+                <button class="copyButton">Copiar</button>
             </div>
         </section>
 
         <section id="codeSection4">
-            <h2>Your Code 4</h2>
+            <h2>Excentricidade</h2>
             <div class="code-container">
-                <textarea class="codeBox" readonly>
-# Example code
-def hello_world():
-    print("Hello, World!")
-    </textarea>
-                <button class="copyButton">Copy Code</button>
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox5" class="codeBox">def calcular_excentricidade(img):
+    """Calcula a excentricidade da figura com base nos momentos centrais."""
+    mu11, mu02, mu20 = momentos_centrados(img)
+    
+    # Matriz de covariância dos momentos centrais
+    cov_matrix = np.array([[mu20, mu11],
+                           [mu11, mu02]])
+    
+    # Calculando os autovalores da matriz de covariância
+    eigenvalues, _ = np.linalg.eig(cov_matrix)
+    
+    # Ordenando os autovalores para garantir que lambda1 >= lambda2
+    lambda1, lambda2 = sorted(eigenvalues, reverse=True)
+    
+    # Excentricidade
+    excentricidade = np.sqrt(1 - (lambda2 / lambda1))
+    return excentricidade
+                </textarea>
+                <button class="copyButton">Copiar</button>
             </div>
         </section>
     </main>
@@ -88,3 +142,4 @@ def hello_world():
     <script src="script.js"></script>
 </body>
 </html>
+    
