@@ -24,15 +24,18 @@
 
     <!-- Side Navigation -->
     <div id="sideNav">
+        <a href="#Abrir_imagens">Abrir Imagens</a>
         <a href="#codeSection">Centroides</a>
         <a href="#codeSection1">Momentos Centrados</a>
         <a href="#codeSection2">Orientação</a>
         <a href="#codeSection3">Desenhar linha com base no angulo</a>
         <a href="#codeSection4">Excentricidade</a>
+        <a href="#Dil_ero">Dilate e Erode</a>
+        <a href="#Eliminar_Ruido">Eliminar Ruido com dilate e erode</a>
     </div>
 
     <main>
-        <section id="Abrir imagens">
+        <section id="Abrir_imagens">
             <h2>Abrir Imagens</h2>
             <div class="code-container">
                 <!-- Alterado para textarea -->
@@ -133,6 +136,31 @@ return mu11, mu02, mu20
     # Excentricidade
     excentricidade = np.sqrt(1 - (lambda2 / lambda1))
     return excentricidade
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+        <section id="Dil_ero">
+            <h2>Dilate e Erode</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox5" class="codeBox">
+I_dilate = sc.binary_dilation(Img,structure = np.ones((5,5)))
+I_eroded = sc.binary_erosion(Img,structure = np.ones((9,9)))
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+        <section id="Eliminar_Ruido">
+            <h2>Eliminar Ruido</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox5" class="codeBox">
+I_dilate = sc.binary_dilation(Iseg,structure = np.ones((5,5)))
+I_eroded = sc.binary_erosion(I_dilate,structure = np.ones((9,9)))
+I_final = sc.binary_dilation(I_eroded,structure = np.ones((5,5)))
                 </textarea>
                 <button class="copyButton">Copiar</button>
             </div>
