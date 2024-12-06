@@ -13,27 +13,63 @@ body {
 }
 
 /* Header */
+/* Header */
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Faz a barra ocupar toda a largura da página */
     background-color: #1f1f1f;
     color: #e0e0e0;
-    padding: 10px 20px;
+    padding: 15px 20px; /* Uniformiza o espaçamento */
     text-align: center;
     border-bottom: 1px solid #333;
+    z-index: 1000; /* Garante que esteja acima de outros elementos */
+    display: flex;
+    justify-content: start;
+    align-items: center;
 }
+
 
 /* Navigation */
 nav {
     position: relative;
 }
 
-nav #menuButton {
+#menuButton {
     background: none;
     border: none;
-    color: #e0e0e0;
-    font-size: 1.5em;
     padding: 10px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+/* Ajustando o tamanho da imagem */
+#menuButton img {
+    width: 30px; /* Defina o tamanho desejado */
+    height: 30px; /* Defina o tamanho desejado */
+}
+
+/* Ajustes para quando o botão for hover */
+#menuButton:hover img {
+    opacity: 0.8; /* Deixa a imagem um pouco transparente ao passar o mouse */
+}
+nav #menuButton {
+    position: relative; /* Deixe relativo ao header */
+    background: none;
+    border: none;
+    color: #1f1f1f; /* Cor clara */
+    font-size: 1.5em; /* Tamanho adequado do ícone */
+    padding: 10px;
+    cursor: pointer;
+    margin-right: auto; /* Move para a extrema esquerda */
+    display: flex; /* Flexível para centralizar o ícone */
+    align-items: center; /* Centraliza verticalmente */
+}
+
+
 
 #sideNav {
     position: fixed;
@@ -47,6 +83,7 @@ nav #menuButton {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    margin-top: 60px;
 }
 
 #sideNav a {
@@ -68,6 +105,7 @@ nav #menuButton {
 main {
     padding: 20px;
     text-align: center;
+    margin-top:30px;
 }
 
 #codeSection {
@@ -76,7 +114,7 @@ main {
 
 .code-container {
     position: relative;
-    display: inline-block;
+    display: flex;
     width: 80%;
     max-width: 800px;
     height: 60vh;
@@ -87,7 +125,7 @@ main {
     background-color: #1e1e1e;
 }
 
-textarea#codeBox {
+textarea.codeBox {
     width: 100%;
     height: 100%;
     resize: none;
@@ -99,23 +137,61 @@ textarea#codeBox {
     background-color: #1e1e1e;
     overflow-y: auto;
 }
-
-textarea#codeBox:focus {
+    
+textarea.codeBox:focus {
     outline: none;
 }
 
-#copyButton {
+/* Botão de copiar com gradiente */
+button.copyButton {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    padding: 5px 10px;
-    background-color: #4CAF50;
+    padding: 10px 20px;
+    background: linear-gradient(90deg,  #0175cf, #0b5aa3); /* Gradiente inicial */
+    background-size: 200% 100%; /* Aumenta o tamanho do gradiente para animá-lo */
     color: white;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 1rem;
+    transition: background-position 0.6s ease; /* Transição suave do gradiente */
 }
 
-#copyButton:hover {
-    background-color: #45a049;
+/* Efeito ao passar o mouse (hover) */
+button.copyButton:hover {
+    background-position: -100% 0; /* Move o gradiente para a esquerda no hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Efeito de sombra */
 }
+
+/* Estilizando a barra de rolagem */
+::-webkit-scrollbar {
+    width: 10px; /* Largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg,#0175cf, #0b5aa3); /* Gradiente de cor */
+    border-radius: 10px; /* Bordas arredondadas */
+    border: 2px solid #333; /* Cor da borda do thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg,#0175cf, #0b5aa3); /* Cor do gradiente quando o thumb é hover */
+}
+
+::-webkit-scrollbar-track {
+    background: #121212; /* Cor do fundo da barra de rolagem */
+    border-radius: 10px; /* Bordas arredondadas do fundo */
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra interna suave */
+}
+
+::-webkit-scrollbar-track:hover {
+    background: #333; /* Fundo do track com hover */
+}
+
+/* Adicionando suavidade ao movimento de rolagem */
+html {
+    scroll-behavior: smooth; /* Adiciona transição suave ao rolar */
+}
+
+

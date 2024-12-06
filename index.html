@@ -1,34 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-PT">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeShare</title>
+    <title>P.I. LEIC</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>CodeShare</h1>
+        <button id="menuButton">
+            <img src="https://img.icons8.com/?size=100&id=eofQ1g5BaAx6&format=png&color=000000" alt="Menu Icon" />
+        </button>
+        <h1>Processamento de Imagem - LEIC 2024/2025</h1>
     </header>
-    <nav>
-        <button id="menuButton">☰ Menu</button>
-        <div id="sideNav" class="hidden">
-            <a href="#codeSection">Index</a>
-        </div>
-    </nav>
+
+    <!-- Side Navigation -->
+    <div id="sideNav">
+      <a href="#codeSection">Code</a>
+      <a href="#codeSection1">Code</a>
+      <a href="#codeSection2">Code</a>
+      <a href="#codeSection3">Code</a>
+      <a href="#codeSection4">Code</a>
+    </div>
+
     <main>
         <section id="codeSection">
             <h2>Your Code</h2>
             <div class="code-container">
-                <textarea id="codeBox" readonly>
+                <textarea class="codeBox" readonly>
 # Example code
 def hello_world():
     print("Hello, World!")
                 </textarea>
-                <button id="copyButton">Copy Code</button>
+                <button class="copyButton">Copy Code</button>
+            </div>
+        </section>
+
+        <section id="codeSection1">
+            <h2>Your Code 1</h2>
+            <div class="code-container">
+                <textarea class="codeBox" readonly>
+# Example code
+def hello_world():
+    print("Hello, World!")
+                </textarea>
+                <button class="copyButton">Copy Code</button>
+            </div>
+        </section>
+
+        <section id="codeSection2">
+            <h2>Your Code 2</h2>
+            <div class="code-container">
+                <textarea class="codeBox" readonly>
+# Example code
+def hello_world():
+    print("Hello, World!")
+                </textarea>
+                <button class="copyButton">Copy Code</button>
+            </div>
+        </section>
+
+        <section id="codeSection3">
+            <h2>Your Code 3</h2>
+            <div class="code-container">
+                <textarea class="codeBox" readonly>
+# Example code
+def hello_world():
+    print("Hello, World!")
+                </textarea>
+                <button class="copyButton">Copy Code</button>
+            </div>
+        </section>
+
+        <section id="codeSection4">
+            <h2>Your Code 4</h2>
+            <div class="code-container">
+                <textarea class="codeBox" readonly>
+# Example code
+def hello_world():
+    print("Hello, World!")
+    </textarea>
+                <button class="copyButton">Copy Code</button>
             </div>
         </section>
     </main>
+
     <script src="script.js"></script>
 </body>
 </html>
