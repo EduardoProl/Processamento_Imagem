@@ -43,12 +43,22 @@
         <a href="#Brilho_GAMA">Brilho, contraste e Gama</a>
         <a href="#BLUR_INT">Blur integral</a>
         <a href="#BLUR_GAUSS">Blur gaussiano</a>
+
+        <br>
+        <text class='index_title'>Tarefas:</text>
+        <hr>
+        <a href="#Radon">Transformada de Radon</a>
+        <a href="#Integral">Matriz integral comulativa</a>
+        <a href="#Filtros">Filtros</a>
+        <br>
+        <br>
+        <br>
     </div>
 
     <main>
-        <hr>
+         
         <text class="titulo">Básico:</text>
-        <hr>
+         
         <section id="Abrir_imagens">
             <h2>Abrir Imagens</h2>
             <div class="code-container">
@@ -60,9 +70,9 @@ img = plt.imread("../imagens/imagem_a.jpg")
             </div>
         </section>
 
-        <hr>
+         
         <text class="titulo">Momentos da Imagem:</text>
-        <hr>
+         
         <section id="codeSection">
             <h2>Centroides</h2>
             <div class="code-container">
@@ -157,9 +167,9 @@ return mu11, mu02, mu20
                 <button class="copyButton">Copiar</button>
             </div>
         </section>
-        <hr>
+         
         <text class="titulo">Filtragem:</text>
-        <hr>
+         
         <section id="Dil_ero">
             <h2>Dilate e Erode</h2>
             <div class="code-container">
@@ -358,6 +368,599 @@ blurred_img = gaussian(imagem_gray)
 #sharpened_img = sharpen(blurred_img)
 sharpened_img = equation_sharpe(imagem_gray , blurred_img )
                 
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+         
+        <text class="titulo">Tarefas:</text>
+         
+        
+        <section id="Radon">
+            <h2>Transformada de Radon</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Radon" class="codeBox">
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+# Função para calcular as projeções horizontal e vertical
+def calculate_projections(image):
+    horizontal_projection = np.sum(image, axis=1)  # Soma ao longo das linhas para projeção horizontal
+    vertical_projection = np.sum(image, axis=0)    # Soma ao longo das colunas para projeção vertical
+    return horizontal_projection, vertical_projection
+
+# Função para realizar a retroprojeção
+def back_projection(horizontal_proj, vertical_proj, image_shape):
+    reconstructed_image = np.zeros(image_shape)
+    
+    # Adiciona a projeção horizontal na imagem reconstruída
+    for i in range(horizontal_proj.shape[0]):
+        reconstructed_image[i, :] += horizontal_proj[i] / image_shape[1]
+
+    # Adiciona a projeção vertical na imagem reconstruída
+    for j in range(vertical_proj.shape[0]):
+        reconstructed_image[:, j] += vertical_proj[j] / image_shape[0]
+
+    # Ajusta os valores de intensidade
+    reconstructed_image = np.where(reconstructed_image > 1.02, 1.0, 0.0)
+   
+    return reconstructed_image
+
+# Carregar a imagem
+image = plt.imread("triangulo.png")
+
+# Converter a imagem para tons de cinza, se necessário
+image = np.mean(image, axis=2)
+
+# Calcular projeções
+horizontal_proj, vertical_proj = calculate_projections(image)
+
+# Realizar a retroprojeção
+reconstructed_image = back_projection(horizontal_proj, vertical_proj, image.shape)
+
+# Plotagem dos resultados
+fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+ax = axes.ravel()
+
+# Imagem Original
+ax[0].imshow(image, cmap='gray')
+ax[0].set_title('Imagem Original')
+ax[0].axis('off')
+
+# Projeção Horizontal
+ax[1].plot(horizontal_proj, range(horizontal_proj.shape[0]), color='black')
+ax[1].invert_yaxis()  # Inverter o eixo Y para corresponder à imagem
+ax[1].set_title('Projeção Horizontal')
+ax[1].set_xlabel('Intensidade')
+ax[1].set_ylabel('Linha')
+
+# Projeção Vertical
+ax[2].plot(range(vertical_proj.shape[0]), vertical_proj, color='black')
+ax[2].set_title('Projeção Vertical')
+ax[2].set_xlabel('Coluna')
+ax[2].set_ylabel('Intensidade')
+
+# Imagem Reconstruída
+ax[3].imshow(reconstructed_image, cmap='gray')
+ax[3].set_title('Imagem Reconstruída')
+ax[3].axis('off')
+
+plt.tight_layout()
+plt.show()
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+        <section id="Integral">
+            <h2>Integral de uma Imagem</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Integral" class="codeBox">
+import matplotlib.pyplot as plt
+import numpy as np
+
+def integral_image(imagem_gray):
+    """
+    Calcula a imagem integral de uma imagem em escala de cinza.
+
+    A imagem integral é uma representação que permite calcular a soma dos valores de pixel em uma
+    região retangular da imagem em tempo constante (O(1)).
+
+    Parâmetros:
+    imagem_gray (numpy.ndarray): Imagem em escala de cinza (2D).
+
+    Retorna:
+    numpy.ndarray: A imagem integral correspondente à imagem de entrada.
+    """
+    integral_img = np.zeros_like(imagem_gray)
+
+    # Primeira célula
+    integral_img[0, 0] = imagem_gray[0, 0]
+    
+    # Primeira linha
+    for j in range(1, imagem_gray.shape[1]):
+        integral_img[0, j] = integral_img[0, j-1] + imagem_gray[0, j]
+
+    # Primeira coluna
+    for i in range(1, imagem_gray.shape[0]):
+        integral_img[i, 0] = integral_img[i-1, 0] + imagem_gray[i, 0]
+
+    # Preencher o restante da matriz de soma acumulada
+    for i in range(1, imagem_gray.shape[0]):
+        for j in range(1, imagem_gray.shape[1]):
+            integral_img[i, j] = imagem_gray[i, j] + integral_img[i-1, j] + integral_img[i, j-1] - integral_img[i-1, j-1]
+    
+    return integral_img
+
+def soma_regiao_integral(integral_img, x1, y1, x2, y2):
+    """
+    Calcula a soma dos valores de pixel em uma região retangular da imagem usando a imagem integral.
+
+    A soma é calculada com base nas coordenadas do canto superior esquerdo (x1, y1) e do canto inferior
+    direito (x2, y2).
+
+    Parâmetros:
+    integral_img (numpy.ndarray): A imagem integral da qual a soma será calculada.
+    x1 (int): Coordenada x do canto superior esquerdo.
+    y1 (int): Coordenada y do canto superior esquerdo.
+    x2 (int): Coordenada x do canto inferior direito.
+    y2 (int): Coordenada y do canto inferior direito.
+
+    Retorna:
+    float: A soma dos valores de pixel na região especificada.
+    """
+    total = integral_img[y2, x2]
+    
+    if x1 > 0:
+        total -= integral_img[y2, x1 - 1]
+    if y1 > 0:
+        total -= integral_img[y1 - 1, x2]
+    if x1 > 0 and y1 > 0:
+        total += integral_img[y1 - 1, x1 - 1]
+
+    return total
+
+# Carrega a imagem
+imagem = plt.imread("barco.jpg")
+height, width, channel = imagem.shape 
+
+# Define as coordenadas do canto superior esquerdo e inferior direito da região de interesse
+top_left = [400, 200]
+bottom_right = [800, 800]
+
+# Converte a imagem para escala de cinza
+imagem_gray = np.mean(imagem, axis=2)
+
+# Recorta a região de interesse da imagem em escala de cinza
+cropped_imagem_gray = imagem_gray[top_left[0]:bottom_right[0], top_left[1]:bottom_right[1]] 
+
+# Calcula a imagem integral da imagem em escala de cinza
+integral_img = integral_image(imagem_gray)
+
+# Calcula a soma da região usando a imagem integral
+soma = soma_regiao_integral(integral_img, top_left[0], top_left[1], bottom_right[0], bottom_right[0])
+print(f"Valor da soma = {soma}")
+
+# Exibe as imagens
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 3, 1)
+plt.title("Imagem Original")
+plt.imshow(imagem)
+plt.subplot(1, 3, 2)
+plt.imshow(imagem_gray, cmap="gray")
+plt.title("Imagem em GrayScale")
+plt.subplot(1, 3, 3)
+plt.imshow(cropped_imagem_gray, cmap="gray")
+plt.title("Imagem em GrayScale Cortada")
+plt.show()
+
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+        <section id="Filtros">
+            <h2>Filtros</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Filtros" class="codeBox">
+import matplotlib.pyplot as plt
+import numpy as np
+
+def integral_image(imagem_gray):
+    """
+    Calcula a imagem integral de uma imagem em tons de cinza.
+
+    Parâmetros:
+    imagem_gray (np.array): Imagem em tons de cinza.
+
+    Retorna:
+    np.array: Imagem integral.
+    """
+    integral_img = np.zeros_like(imagem_gray)
+
+    # Primeiro pixel
+    integral_img[0, 0] = imagem_gray[0, 0]
+    
+    # Primeira linha
+    integral_img[0, 1:] = np.cumsum(imagem_gray[0, 1:], axis=0) + imagem_gray[0, 0]
+
+    # Primeira coluna
+    integral_img[1:, 0] = np.cumsum(imagem_gray[1:, 0], axis=0) + imagem_gray[0, 0]
+
+    # Restantes pixeis
+    for i in range(1, imagem_gray.shape[0]):
+        for j in range(1, imagem_gray.shape[1]):
+            integral_img[i, j] = (imagem_gray[i, j] + integral_img[i-1, j] + 
+                                  integral_img[i, j-1] - integral_img[i-1, j-1])
+    
+    return integral_img
+
+def soma_regiao_integral(integral_img, x1, y1, x2, y2):
+    """
+    Calcula a soma dos valores em uma região da imagem integral.
+
+    Parâmetros:
+    integral_img (np.array): Imagem integral.
+    x1, y1 (int): Coordenadas do canto superior esquerdo da região.
+    x2, y2 (int): Coordenadas do canto inferior direito da região.
+
+    Retorna:
+    int: Soma dos valores na região especificada.
+    """
+    total = integral_img[y2, x2]
+    
+    if x1 > 0:
+        total -= integral_img[y2, x1 - 1]
+    if y1 > 0:
+        total -= integral_img[y1 - 1, x2]
+    if x1 > 0 and y1 > 0:
+        total += integral_img[y1 - 1, x1 - 1]
+
+    return total
+
+def filtro_média(imagem_gray, integral_img, window_size):
+    """
+    Aplica um filtro de média usando a imagem integral.
+
+    Parâmetros:
+    imagem_gray (np.array): Imagem em tons de cinza.
+    integral_img (np.array): Imagem integral.
+    window_size (int): Tamanho da janela para o filtro de média.
+
+    Retorna:
+    np.array: Imagem filtrada.
+    """
+    média_image = np.zeros_like(imagem_gray)
+    half_window = window_size // 2
+    
+    for i in range(imagem_gray.shape[0]):
+        for j in range(imagem_gray.shape[1]):
+            x1 = max(0, j - half_window)
+            y1 = max(0, i - half_window)
+            x2 = min(imagem_gray.shape[1] - 1, j + half_window)
+            y2 = min(imagem_gray.shape[0] - 1, i + half_window)
+            
+            média_image[i, j] = (soma_regiao_integral(integral_img, x1, y1, x2, y2) / 
+                                 ((x2 - x1 + 1) * (y2 - y1 + 1)))
+    
+    return média_image
+
+def apply_prewitt(imagem_gray, kernel):
+    """
+    Aplica um filtro Prewitt na imagem em tons de cinza.
+
+    Parâmetros:
+    imagem_gray (np.array): Imagem em tons de cinza.
+    kernel (np.array): Kernel Prewitt para o filtro.
+
+    Retorna:
+    np.array: Imagem filtrada.
+    """
+    filtered_img = np.zeros_like(imagem_gray)
+    padded_image = np.pad(imagem_gray, 1, mode='constant', constant_values=0)
+    
+    for i in range(imagem_gray.shape[0]):
+        for j in range(imagem_gray.shape[1]):
+            window = padded_image[i:i+3, j:j+3]
+            filtered_img[i, j] = np.sum(window * kernel)
+    return filtered_img
+
+def combined_filter(imagem_gray):
+    """
+    Combina filtros Prewitt em quatro direções (0, 45, 90 e 135 graus).
+
+    Parâmetros:
+    imagem_gray (np.array): Imagem em tons de cinza.
+
+    Retorna:
+    np.array: Imagem filtrada combinada.
+    """
+    kernels = {
+        "0G": np.array([[-1, 0, 1], [-1, 0, 1], [-1, 0, 1]]),
+        "45G": np.array([[-1, -1, 0], [-1, 0, 1], [0, 1, 1]]),
+        "90G": np.array([[-1, -1, -1], [0, 0, 0], [1, 1, 1]]),
+        "135G": np.array([[0, 1, 1], [1, 0, 1], [1, 1, 0]])
+    }
+    
+    filtered_images = [apply_prewitt(imagem_gray, kernel) for kernel in kernels.values()]
+    return sum(np.abs(img) for img in filtered_images)
+
+def gaussian(imagem_gray):
+    """
+    Aplica um filtro Gaussiano na imagem em tons de cinza.
+
+    Parâmetros:
+    imagem_gray (np.array): Imagem em tons de cinza.
+
+    Retorna:
+    np.array: Imagem filtrada.
+    """
+    gaussian_matrix = np.array([[1, 4, 6, 4, 1],
+                                [4, 16, 24, 16, 4],
+                                [6, 24, 36, 24, 6],
+                                [4, 16, 24, 16, 4],
+                                [1, 4, 6, 4, 1]])
+    gaussian_matrix = gaussian_matrix / np.sum(gaussian_matrix)
+
+    filtered_img = np.zeros_like(imagem_gray)
+    padded_image = np.pad(imagem_gray, 2, mode='constant', constant_values=0)
+    
+    for i in range(imagem_gray.shape[0]):
+        for j in range(imagem_gray.shape[1]):
+            window = padded_image[i:i+5, j:j+5]
+            filtered_img[i, j] = np.sum(window * gaussian_matrix)
+    
+    return filtered_img
+
+def equation_sharpe(imagem_gray, blurred_img):
+    """
+    Aplica um filtro de nitidez na imagem usando uma imagem borrada.
+
+    Parâmetros:
+    imagem_gray (np.array): Imagem original em tons de cinza.
+    blurred_img (np.array): Imagem borrada.
+
+    Retorna:
+    np.array: Imagem com nitidez aumentada.
+    """
+    alpha = 1.5
+    return imagem_gray + alpha * (imagem_gray - blurred_img)
+
+# Leitura e exibição das imagens
+imagem = plt.imread("../imagens/pcb.jpg")
+imagem_gray = np.mean(imagem, axis=2)
+
+integral_img = integral_image(imagem_gray)
+N = 5
+média_imagem = filtro_média(imagem_gray, integral_img, N)
+prewitt_imagem = combined_filter(imagem_gray)
+gaussian_imagem = gaussian(imagem_gray)
+sharp_imagem = equation_sharpe(imagem_gray, média_imagem)
+
+plt.figure(figsize=(15, 10))
+plt.subplot(2, 3, 1)
+plt.title("Imagem Original")
+plt.imshow(imagem)
+
+plt.subplot(2, 3, 2)
+plt.title("Imagem para níveis de cinzento")
+plt.imshow(imagem_gray, cmap='gray')
+
+plt.subplot(2, 3, 3)
+plt.title(f"Filtro de Média NxN (5x5)")
+plt.imshow(média_imagem, cmap='gray')
+
+plt.subplot(2, 3, 4)
+plt.title("Filtro Prewitt")
+plt.imshow(prewitt_imagem, cmap='gray')
+
+plt.subplot(2, 3, 5)
+plt.title("Filtro Gaussiano")
+plt.imshow(gaussian_imagem, cmap='gray')
+
+plt.subplot(2, 3, 6)
+plt.title("Imagem com Nitidez Aumentada")
+plt.imshow(sharp_imagem, cmap='gray')
+
+plt.tight_layout()
+plt.show()
+
+
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+        <section id="Arucos">
+            <h2>Arucos</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Arucos" class="codeBox">
+"""
+O objetivo deste trabalho consiste em identificar os marcadores ARUCo presentes na imagem (imagem 1)  em anexo, através dos seguintes passos:
+1 - Segmentar a imagem (extrair pixeis escuros) (imagem 2)
+2 - Remover ruído utilizando operadores morfológicos (imagem 3)
+3 - Fazer labeling à imagem (identificar os blobs) (imagem 4)
+4 - Extrair as subimagens de cada maracador ARUCO através dos valores de área dos blobs (imagem 5)
+5 - Para cada marcador, extrair a palavra binária (imagem 6)
+6 - Identificar os marcadores através do dicionário seguinte (imagem 7):
+        [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1],  # USV
+        [0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0],  # ASV
+        [0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0],  # ROV
+        [0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1],  # AAV
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],  # UUV
+        [1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0],  # UAV
+"""
+
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.ndimage as sc
+
+img = plt.imread("aruco01.png")
+img_gray = np.mean(img, axis=2)
+img_gray = img_gray < 0.5
+
+img_dil = sc.binary_dilation(img_gray, structure=np.ones([3, 3]))
+img_erode = sc.binary_erosion(img_dil, structure=np.ones([7, 7]))
+img_final = sc.binary_dilation(img_erode, structure=np.ones([4, 4]))
+
+labeled_img, num_features = sc.label(img_final)
+
+excentricidades = []
+rectangular_marker_imgs = []
+bouding_marker_imgs = []
+
+
+for k in range(1, num_features + 1):
+    M00 = M01 = M10 = 0
+
+    for i in range(labeled_img.shape[0]):
+        for j in range(labeled_img.shape[1]):
+            M00 += (labeled_img[i, j] == k).astype(int)
+            M01 += (labeled_img[i, j] == k).astype(int) * j
+            M10 += (labeled_img[i, j] == k).astype(int) * i
+
+    if M00 == 0:  
+        continue
+
+    y = M01 / M00 
+    x = M10 / M00  
+
+    mu11 = mu02 = mu20 = 0
+    for i in range(labeled_img.shape[0]):
+        for j in range(labeled_img.shape[1]):
+            mu11 += (i - x) * (j - y) * (labeled_img[i, j] == k).astype(int)
+            mu02 += (j - y) ** 2 * (labeled_img[i, j] == k).astype(int)
+            mu20 += (i - x) ** 2 * (labeled_img[i, j] == k).astype(int)
+
+    cov_matrix = np.array([[mu20, mu11], [mu11, mu02]])
+    eigenvalues, _ = np.linalg.eig(cov_matrix)
+    lambda_max, lambda_min = np.sort(eigenvalues)[::-1]
+
+    if lambda_max == 0:
+        excentricidade = 0
+    else:
+        excentricidade = np.sqrt(1 - (lambda_min / lambda_max))
+
+    excentricidades.append(excentricidade)
+
+    if excentricidade < 0.5 and excentricidade > 0.0:
+        rows, cols = np.where(labeled_img == k)
+        min_row, max_row = rows.min(), rows.max()
+        min_col, max_col = cols.min(), cols.max()
+        
+        bouding_marker_imgs.append((min_row, max_row , min_col, max_col))
+        
+        sub_img = img_final[min_row:max_row + 1, min_col:max_col + 1]
+        rectangular_marker_imgs.append((sub_img, excentricidade))
+
+
+#Ler aruco
+def extrair_palavra_binaria(marker_img, grid_size=(6, 6) , inner_size=(4, 4) ):
+    """
+    Extrai uma representação binária de um marcador ARUCO a partir de uma subimagem.
+
+    Parâmetros:
+    marker_img (ndarray): A subimagem do marcador.
+    grid_size (tuple): Tamanho da grade externa (6x6 por padrão).
+    inner_size (tuple): Tamanho da grade interna (4x4 por padrão).
+
+    Retorna:
+    str: Uma string binária representando a área interna 4x4 do marcador.
+    """
+    rows, cols = marker_img.shape
+    cell_height = rows // grid_size[0]
+    cell_width = cols // grid_size[1]
+    
+    # Define as bordas da área 4x4 dentro da 6x6
+    start_row = (grid_size[0] - inner_size[0]) // 2
+    start_col = (grid_size[1] - inner_size[1]) // 2
+    
+    word = ""
+    for i in range(start_row, start_row + inner_size[0]):
+        for j in range(start_col, start_col + inner_size[1]):
+            # Extrai uma célula da grade
+            cell = marker_img[i*cell_height:(i+1)*cell_height, j*cell_width:(j+1)*cell_width]
+            cell_mean = np.mean(cell)
+            if cell_mean > 0.6:
+                word += "1" 
+            else: 
+                word += "0"  
+    
+    return word
+
+markers_dicionary = [
+    (np.array([1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1]), "USV"),
+    (np.array([0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0]), "ASV"),
+    (np.array([0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0]), "ROV"),
+    (np.array([0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1]), "AAV"),
+    (np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]), "UUV"),
+    (np.array([1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0]), "UAV")
+]
+
+palavras_bins =[]
+for i in range(len(rectangular_marker_imgs)):
+    (marker_img, ecc) = rectangular_marker_imgs[i]
+    
+    palavra_bin_str = extrair_palavra_binaria(marker_img)
+    print(f"Palavra binaria do marcador {i+1} = {palavra_bin_str}")
+    
+    palavra_bin = [int(bit) for bit in palavra_bin_str]
+    palavras_bins.append(palavra_bin)
+    
+
+# Display the original images and processed stages
+plt.figure(figsize=(15, 10))
+
+plt.subplot(2, 3, 1)
+plt.imshow(img)
+plt.title("Imagem Original (1)")
+
+plt.subplot(2, 3, 2)
+plt.imshow(img_gray)
+plt.title("Imagem Binário (2)")
+
+plt.subplot(2, 3, 3)
+plt.imshow(img_final)
+plt.title("Imagem Sem Ruído")
+
+plt.subplot(2, 3, 4)
+plt.imshow(labeled_img)
+plt.title("Objetos com Label")
+
+plt.subplot(2, 3, 5)
+plt.imshow(img)
+for i in range(len(palavras_bins)):
+    (marker_img, ecc) = rectangular_marker_imgs[i]
+    
+    min_row, max_row , min_col, max_col = bouding_marker_imgs[i]
+    
+    plt.plot([min_col, max_col, max_col, min_col, min_col], 
+            [min_row, min_row, max_row, max_row, min_row], color='red', linewidth=2)
+    plt.title(f"Subimagens de cada maracador ARUCO (5)")
+    
+    for bin_array, marker_name in markers_dicionary:
+        if np.array_equal(palavras_bins[i], bin_array):
+            plt.text(min_col, min_row, marker_name, color="Black", size=10)
+            break 
+
+# Display each extracted rectangular marker
+for i in range(len(rectangular_marker_imgs)):
+    (marker_img, ecc) = rectangular_marker_imgs[i]
+    plt.figure()
+    plt.imshow(marker_img)
+    plt.title(f"Marcador {i+1} (excentricidade: {ecc:.2f}) (6)")
+    plt.axis('off')
+
+
+plt.tight_layout()
+plt.show()
+
                 </textarea>
                 <button class="copyButton">Copiar</button>
             </div>

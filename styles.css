@@ -209,18 +209,42 @@ html {
     scroll-behavior: smooth; /* Adiciona transição suave ao rolar */
 }
 
-text.titulo{
-    font-size: 2em;
-    margin-bottom: 1em;
-    text-align: left;
-    padding-right: 75%;
+text.titulo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.5em;
+    background: linear-gradient(90deg, #00C6FF, #0072FF); /* Gradiente azul */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Sombra suave */
+    text-transform: uppercase; /* Letras maiúsculas */
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #0072FF; /* Linha decorativa */
 }
 
 text.index_title{
-    font-size: 2em;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5em;
+    background: linear-gradient(90deg, #00C6FF, #0072FF); /* Gradiente azul */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Sombra suave */
+    text-transform: uppercase; /* Letras maiúsculas */
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #0072FF; /* Linha decorativa */
 }
 
+/* Efeito de hover */
+text.index_title:hover, text.titulo:hover {
+    color: #00C6FF; /* Muda para laranja ao passar o mouse */
+    -webkit-text-fill-color: #00C6FF; /* Força a cor no hover */
+    background: none;
+    transition: color 0.8s ease-in-out; /* Transição suave */
+}
+
+h2{
+    margin-top: 20px;
+}
 
 
