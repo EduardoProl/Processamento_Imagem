@@ -60,3 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+    // Evitar que links internos sejam adicionados ao histórico
+    const noHistoryLinks = document.querySelectorAll('a[href^="#"]'); // Selecionar todos os links com âncoras
+    noHistoryLinks.forEach(link => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault(); // Impedir o comportamento padrão do link
+            const targetId = link.getAttribute('href'); // Obter o destino do link
+            const targetElement = document.querySelector(targetId); // Selecionar o elemento de destino
+            
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' }); // Rolar suavemente até o destino
+            }
+            
+            // Atualizar a URL sem adicionar ao histórico
+            history.replaceState(null, '', targetId);
+        });
+    });

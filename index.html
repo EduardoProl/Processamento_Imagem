@@ -28,6 +28,8 @@
         <text class='index_title'>Básico:</text>    
         <hr>
         <a href="#Abrir_imagens">Abrir Imagens</a>
+        <a href="#Imagem_binaria">Imagem Binária</a>
+        <a href="#Imagem_grayscale">Imagem em Escala de Cinza</a>
         <br>
         <text class='index_title'>Centroides e Momentos da imagem:</text>
         <hr>
@@ -51,6 +53,8 @@
         <a href="#Radon">Transformada de Radon</a>
         <a href="#Integral">Matriz integral comulativa</a>
         <a href="#Filtros">Filtros</a>
+        <a href="#Arucos">Arucos</a>
+        <a href="#Calibrar_Camera">Calibrar Camera</a>
         <br>
         <br>
         <br>
@@ -66,6 +70,47 @@
                 <!-- Alterado para textarea -->
                 <textarea id="codeBox3" class="codeBox">
 img = plt.imread("../imagens/imagem_a.jpg")
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+        <section id="Imagem_binaria">
+            <h2>Converter para binário</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox3" class="codeBox">
+def to_binary(image_gray, threshold=0.5):
+    """
+    Converte uma imagem em escala de cinza para binário.
+
+    Parâmetros:
+    - image_gray (numpy array): Imagem em escala de cinza.
+    - threshold (float): Valor de limiar para conversão (0 a 1).
+
+    Retorna:
+    - numpy array: Imagem binária.
+    """
+    return (image_gray > threshold).astype(np.uint8)
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+        <section id="Imagem_grayscale">
+            <h2>Converter para preto e branco</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox3" class="codeBox">
+def to_grayscale(image):
+    """
+    Converte uma imagem RGB para escala de cinza.
+
+    Parâmetros:
+    - image (numpy array): Imagem RGB.
+
+    Retorna:
+    - numpy array: Imagem em escala de cinza.
+    """
+    return np.mean(image, axis=2)
                 </textarea>
                 <button class="copyButton">Copiar</button>
             </div>
@@ -962,6 +1007,383 @@ for i in range(len(rectangular_marker_imgs)):
 plt.tight_layout()
 plt.show()
 
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+
+        <section id="Calibrar_Camera">
+            <h2>Calibrar Camera</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Calibrar_Camera" class="codeBox">
+import cv2
+import glob
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import NearestNeighbors
+
+
+def Detetar_cantos(num_images,images):
+    cantos=np.zeros([num_images,4,2])
+    for i in range(num_images):
+        fname = images[i]
+        print('Processing {}'.format(fname))
+        
+        I = cv2.imread(fname)
+        hsv = cv2.cvtColor(I, cv2.COLOR_BGR2HSV)
+        Ibw = (hsv[:, :, 1] > 100) * (hsv[:, :, 0] < 70) * (hsv[:, :, 0] > 55) * (I[:, :, 0] > 10) * (I[:, :, 1] > 10)
+        Ibw = Ibw.astype(np.uint8) * 255
+        
+        Ibw = cv2.dilate(Ibw, np.ones((7, 7)))
+        Ibw = cv2.erode(Ibw, np.ones((13, 13)))
+        colored_image = cv2.cvtColor(Ibw, cv2.COLOR_GRAY2BGR)
+        
+        # Encontrar contornos
+        contornos, _ = cv2.findContours(Ibw, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Encontrar o maior contorno
+        maior_contorno = max(contornos, key=cv2.contourArea)
+
+        # Desenhar o maior contorno em verde
+        I_cantos = I.copy()
+        cv2.drawContours(colored_image, [maior_contorno], -1, (0, 255, 0), 25)
+
+        # Aproximar o contorno para encontrar os cantos
+        epsilon = 0.1 * cv2.arcLength(maior_contorno, True)
+        approx = cv2.approxPolyDP(maior_contorno, epsilon, True)
+        
+        # Separar pontos superiores e inferiores com base em suas coordenadas y
+        pontos = sorted(approx.reshape(4, 2), key=lambda x: x[1])  # Ordenar por y
+        pontos_superiores = sorted(pontos[:2], key=lambda x: x[0])  # Ordenar os dois pontos superiores por x
+        pontos_inferiores = sorted(pontos[2:], key=lambda x: x[0], reverse=True)  # Ordenar os dois inferiores por x
+
+        # cantos ordenados: superior-esquerdo, superior-direito, inferior-direito, inferior-esquerdo
+        cantos_ordenados = np.array(pontos_superiores + pontos_inferiores, dtype="float32")
+
+
+        cantos[i]=cantos_ordenados
+        # Desenhar os cantos do maior contorno
+        for ponto in cantos_ordenados:
+            x, y = ponto.ravel()
+            cv2.circle(colored_image, (int(x), int(y)), 35, (0, 0, 255), -1)
+
+        # Adicionar imagem ao subplot
+        plt.subplot(rows, cols, i + 1)
+        plt.imshow(cv2.cvtColor(colored_image, cv2.COLOR_BGR2RGB))
+        plt.axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+    plt.figure()
+    
+    return cantos
+
+
+def get_warped_img(num_images,images,cantos):
+    molduraThickness=1.5 #1.5 squares
+    boardSquares=np.array([15,29])
+    resolution=50
+    warpedSize=np.array([resolution*(boardSquares[0]+2*molduraThickness), resolution*(boardSquares[1]+2*molduraThickness)]).astype(np.int32)
+    pts_destino = np.array([[0, 0], [warpedSize[1], 0], [warpedSize[1], warpedSize[0]], [0, warpedSize[0]]], dtype='float32')
+
+    M=np.zeros([num_images,3,3])
+
+    for i in range(num_images):
+        fname = images[i]
+        print(f'Processing {fname}')
+        
+        # Carregar imagem
+        I = cv2.imread(fname)
+        
+        # Calcular a matriz de transformação projetiva
+        M[i] = cv2.getPerspectiveTransform(np.array(cantos[i], dtype='float32'), pts_destino)
+
+        # Aplicar a transformação para obter a imagem transformada
+        warped_image = cv2.warpPerspective(I, M[i], (warpedSize[1], warpedSize[0]))
+    
+        # Adicionar a imagem ao subplot
+        plt.subplot(5, 4, i + 1)
+        plt.imshow(cv2.cvtColor(warped_image, cv2.COLOR_BGR2RGB))  # Converter de volta para RGB para exibição
+        plt.axis('off')
+        
+    plt.tight_layout()
+    plt.show()
+    plt.figure()
+    
+    return M
+
+
+def get_centroids_of_black_squares(num_images,images,M):
+    molduraThickness=1.5 #1.5 squares
+    boardSquares=np.array([15,29])
+    reducedSquares=np.array([int(np.ceil(boardSquares[0]/2)),int(np.ceil(boardSquares[1]/2))])
+    resolution=50
+    warpedSize=np.array([resolution*(boardSquares[0]+2*molduraThickness), resolution*(boardSquares[1]+2*molduraThickness)]).astype(np.int32)
+    stats_centroides=np.zeros([num_images,2*reducedSquares[0]*reducedSquares[1]-reducedSquares[0]-reducedSquares[1]+1,2])
+
+    for i in range(num_images):
+        fname = images[i]
+        print(f'Processing {fname}')
+        
+        # Carregar imagem
+        I = cv2.imread(fname)
+
+        # Aplicar a transformação para obter a imagem transformada
+        warped_image = cv2.warpPerspective(I, M[i], (warpedSize[1], warpedSize[0]))
+
+        # Segmentação por threshold adaptativo
+        gray_warped = warped_image[:, :, 1]
+        bw_warped = cv2.adaptiveThreshold(gray_warped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 111, 1)
+
+        # Centroides dos quadrados pretos
+        Iwhite = cv2.dilate(bw_warped, np.ones((9, 9)))  # Dilatar para melhorar a detecção
+        Iblack = 255 - Iwhite  # Inverter a imagem binária (para os quadrados brancos se tornarem pretos)
+
+        # Criar uma cópia colorida para desenhar os círculos
+        colored_image = cv2.cvtColor(Iwhite, cv2.COLOR_GRAY2BGR)
+        
+        # Encontrar componentes conectados
+        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(Iblack)
+        
+        # Filtrar os quadrados com base em largura e altura
+        filtered_centroids = []
+        for j in range(1, num_labels):  # Começar de 1 para ignorar o fundo (label 0)
+            x, y, w, h, area = stats[j]
+            
+            # Verificar se a largura e altura estão no intervalo desejado
+            if resolution - 20 < w < resolution and resolution - 20 < h < resolution:
+                filtered_centroids.append(centroids[j])  # Adicionar os stats do quadrado que atende aos critérios
+        
+        # Converter a lista de stats filtrados para um array
+        stats_centroides[i] = np.array(filtered_centroids)
+
+        for centroid in filtered_centroids:  
+            center_x, center_y = centroid  # Usar diretamente as coordenadas (x, y)
+
+            # Desenhar um círculo verde no centroide
+            cv2.circle(colored_image, (int(center_x), int(center_y)), 11, (0, 0, 255), -1)  # Círculo preenchido de verde
+
+
+        # Adicionar a imagem ao subplot
+        plt.subplot(rows, cols, i + 1)
+        plt.imshow(cv2.cvtColor(colored_image, cv2.COLOR_BGR2RGB))  # Converter de volta para RGB para exibição
+        plt.axis('off')
+        
+    plt.tight_layout()
+    plt.show()
+    plt.figure()
+    
+    return stats_centroides
+
+def filtrar_e_ordenar_centroid_com_KNN(num_images,images,M,stats_centroides):
+    resolution=50
+    molduraThickness=1.5 #1.5 squares
+    boardSquares=np.array([15,29])
+    reducedSquares=np.array([int(np.ceil(boardSquares[0]/2)),int(np.ceil(boardSquares[1]/2))])
+    grid_rows, grid_cols = reducedSquares[0],reducedSquares[1]
+    warped_centroids=np.zeros([num_images,reducedSquares[0]*reducedSquares[1],2])
+    warpedSize=np.array([resolution*(boardSquares[0]+2*molduraThickness), resolution*(boardSquares[1]+2*molduraThickness)]).astype(np.int32)
+
+    # Loop sobre as imagens
+    for i in range(num_images):
+        fname = images[i]
+        print(f'Processing {fname}')
+
+        # Carregar imagem
+        I = cv2.imread(fname)
+
+        # Aplicar a transformação para obter a imagem transformada
+        warped_image = cv2.warpPerspective(I, M[i], (warpedSize[1], warpedSize[0]))
+
+        # Segmentação por threshold adaptativo
+        gray_warped = warped_image[:, :, 1]
+        bw_warped = cv2.adaptiveThreshold(gray_warped, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 111, 1)
+
+        # Centroides dos quadrados pretos
+        Iwhite = cv2.dilate(bw_warped, np.ones((9, 9)))  # Dilatar para melhorar a detecção
+        Iblack = 255 - Iwhite  # Inverter a imagem binária (para os quadrados brancos se tornarem pretos)
+
+        # Criar uma cópia colorida para desenhar os círculos
+        colored_image = cv2.cvtColor(Iwhite, cv2.COLOR_GRAY2BGR)
+
+
+        # Ajustar o modelo KNN com os centroides filtrados
+        knn = NearestNeighbors(n_neighbors=1).fit(stats_centroides[i])
+
+        # Desenhar os centroides
+        for centroid in stats_centroides[i]:  
+            center_x, center_y = centroid  # Usar diretamente as coordenadas (x, y)
+
+            # Desenhar um círculo verde no centroide
+            cv2.circle(colored_image, (int(center_x), int(center_y)), 10, (50, 50, 50), -1)  # Círculo preenchido de verde
+
+        # Encontrar limites da grelha
+        x_min, y_min = np.min(stats_centroides[i], axis=0)
+        x_max, y_max = np.max(stats_centroides[i], axis=0)
+
+        # Definir o espaçamento da grelha
+        grid_x_spacing = (x_max - x_min) / (grid_cols - 1)
+        grid_y_spacing = (y_max - y_min) / (grid_rows - 1)
+
+        # Gerar nós da grelha
+        
+        grid_nodes = []
+        idx=0
+        for row in range(grid_rows):
+            for col in range(grid_cols):
+                grid_x = int(x_min + col * grid_x_spacing)
+                grid_y = int(y_min + row * grid_y_spacing)
+                grid_nodes.append([grid_x, grid_y])
+                #cv2.circle(colored_image, (grid_x, grid_y), 10, (0, 128, 255), -1)  # Nó da grelha em azul
+
+                # Desenhar linhas verticais (exceto para o último nó de cada coluna)
+                if col < grid_cols - 1:
+                    next_x = int(x_min + (col+1) * grid_x_spacing)
+                    cv2.line(colored_image, (grid_x, grid_y), (next_x, grid_y), (0, 0, 100), 2)
+
+                # Desenhar linhas horizontais (exceto para o último nó de cada linha)
+                if row < grid_rows - 1:
+                    next_y = int(y_min + (row+1) * grid_y_spacing)
+                    cv2.line(colored_image, (grid_x, grid_y), (grid_x, next_y), (0, 0, 100), 2)
+                    
+                distance, nearest_index = knn.kneighbors([(grid_x, grid_y)])
+                nearest_centroid = stats_centroides[i][nearest_index[0][0]]
+                
+                warped_centroids[i,idx] = nearest_centroid
+                idx=idx+1
+                
+                center_x, center_y = nearest_centroid  # Usar diretamente as coordenadas (x, y)
+                cv2.circle(colored_image, (int(center_x), int(center_y)), 11, (0, 0, 255), -1)  # Círculo preenchido de verde
+
+                # Desenhar uma linha conectando o nó da grelha ao centroide mais próximo
+                center_x, center_y = nearest_centroid
+                cv2.line(colored_image, (grid_x, grid_y), (int(center_x), int(center_y)), (0, 255, 0), 3)
+
+
+        # Adicionar a imagem ao subplot
+        plt.subplot(rows, cols, i + 1)
+        plt.imshow(cv2.cvtColor(colored_image, cv2.COLOR_BGR2RGB))
+        plt.axis('off')
+
+    # Exibir as imagens com os centroides e a grelha sobrepostos
+    plt.tight_layout()
+    plt.show()
+    plt.figure()
+
+    return warped_centroids
+
+
+def por_centroids_na_img_original(num_images,images,warped_centroids):
+    molduraThickness=1.5 #1.5 squares
+    resolution=50
+    boardSquares=np.array([15,29])
+    warpedSize=np.array([resolution*(boardSquares[0]+2*molduraThickness), resolution*(boardSquares[1]+2*molduraThickness)]).astype(np.int32)
+    pts_destino = np.array([[0, 0], [warpedSize[1], 0], [warpedSize[1], warpedSize[0]], [0, warpedSize[0]]], dtype='float32')
+    reducedSquares=np.array([int(np.ceil(boardSquares[0]/2)),int(np.ceil(boardSquares[1]/2))])
+    centroides_reais=np.zeros([num_images,reducedSquares[0]*reducedSquares[1],2])
+    
+    # Loop sobre as imagens
+    for i in range(num_images):
+        fname = images[i]
+        print(f'Processing {fname}')
+
+        # Carregar imagem
+        I = cv2.imread(fname)
+
+        # Transformar os centróides para coordenadas reais usando a matriz de homografia
+        c = warped_centroids[i].reshape(warped_centroids[i].shape[0], 1, 2)
+        h = cv2.findHomography(pts_destino.astype('float32'), cantos[i].astype('float32'))[0]
+        #h = np.linalg.inv(M[i])
+        centroides_reais[i] = cv2.perspectiveTransform(c, h).squeeze()
+
+        # Desenhar os centroides reais
+        for (x, y) in centroides_reais[i]:
+            # Desenhar um círculo em cada centroide
+            cv2.circle(I, (int(x), int(y)), 25, (0, 0, 255), -1)  # Círculo verde
+
+        # Mostrar a imagem com os centroides desenhados
+        plt.subplot(rows, cols, i + 1)
+        plt.imshow(cv2.cvtColor(I, cv2.COLOR_BGR2RGB))
+        plt.axis('off')
+
+    plt.tight_layout()
+    plt.show()
+    plt.figure()
+
+    return centroides_reais
+
+def calibarar_camera(num_images,images,centroides_reais):
+    boardSquares=np.array([15,29])
+    reducedSquares=np.array([int(np.ceil(boardSquares[0]/2)),int(np.ceil(boardSquares[1]/2))])
+    camsize = cv2.imread(images[0]).shape
+    NY = reducedSquares[0]
+    NX = reducedSquares[1]
+    objp = np.zeros((NY * NX, 3), np.float32)
+    objp[:, :2] = np.mgrid[0:NX, 0:NY].T.reshape(-1, 2)
+    imgpoints = [centroides_reais[i].reshape(-1, 1, 2).astype('single') for i in range(len(centroides_reais))]
+    objpoints = [objp.astype('single') for i in range(len(centroides_reais))]
+    calibration_stop_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 1000, 1e-9)
+
+    # Calibracao da camara
+    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, (camsize[1], camsize[0]), None, None, None, calibration_stop_criteria)
+    print(np.array2string(mtx, formatter={'float_kind':lambda x: f"{x:.2f}"}))
+
+    # Calcular matriz da camara optimizada (alpha=0 para manter o máximo do campo de visão sem bordas, alpha=1 para mostrar campo de visão completo)
+    mtx_opt0, roi0 = cv2.getOptimalNewCameraMatrix(mtx, dist, (camsize[1], camsize[0]), alpha=0)
+    mtx_opt1, roi1 = cv2.getOptimalNewCameraMatrix(mtx, dist, (camsize[1], camsize[0]), alpha=1)
+
+    # Correção das imagens
+
+    for i in range(num_images):
+        fname = images[i]
+        print(f'Processing {fname}')
+        
+        # Carregar imagem original
+        I = cv2.imread(fname)
+
+        # Corrigir distorção sem corte
+        corrI = cv2.undistort(I, mtx, dist, None, mtx_opt1)
+
+        # Mostrar a imagem corrigida
+        plt.subplot(rows, cols, i + 1)
+        plt.imshow(cv2.cvtColor(corrI, cv2.COLOR_BGR2RGB))
+        plt.axis('off')
+
+    plt.tight_layout()
+    plt.show()
+       
+
+nome = 'calibracao'
+images = glob.glob(nome + '/*.jpg')
+num_images = len(images)
+cols = 4  # Número de colunas desejado
+rows = (num_images // cols) + (num_images % cols > 0)  # Calcula o número de linhas
+
+# Passo #0: Ler as imagens
+plt.figure()
+for i in range(num_images):
+    fname = images[i]
+    print('Processing {}'.format(fname))
+    
+    I = cv2.imread(fname)
+
+    # Adicionar imagem ao subplot
+    plt.subplot(rows, cols, i + 1)
+    plt.imshow(cv2.cvtColor(I, cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+plt.figure()
+
+cantos = Detetar_cantos(num_images,images)
+M = get_warped_img(num_images,images,cantos)
+centroides = get_centroids_of_black_squares(num_images,images,M)
+filtered_centroid = filtrar_e_ordenar_centroid_com_KNN(num_images,images,M,centroides)
+centroides_reais = por_centroids_na_img_original(num_images,images,filtered_centroid)
+calibarar_camera(num_images,images,centroides_reais)
                 </textarea>
                 <button class="copyButton">Copiar</button>
             </div>
