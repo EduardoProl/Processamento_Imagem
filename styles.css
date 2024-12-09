@@ -209,4 +209,18 @@ html {
     scroll-behavior: smooth; /* Adiciona transição suave ao rolar */
 }
 
+text.titulo{
+    font-size: 2em;
+    margin-bottom: 1em;
+    text-align: left;
+    padding-right: 75%;
+}
+
+text.index_title{
+    font-size: 2em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
 
