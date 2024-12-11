@@ -77,6 +77,7 @@
                 <p>
                     Os <strong>espaços de cor</strong> são representações matemáticas que permitem descrever cores em imagens digitais. Cada espaço organiza as cores de forma diferente, dependendo da aplicação ou do sistema de captura e exibição.
                 </p>
+                <image src="hsvVSrgb.jpg" alt="HSV vs RGB" width="100%"></image>
                 <h3>Principais Espaços de Cor:</h3>
                 <ul>
                     <li><strong>RGB (Red, Green, Blue):</strong> Modelo aditivo baseado em três componentes (vermelho, verde e azul). Amplamente usado em dispositivos digitais.</li>
@@ -97,6 +98,7 @@
                 <p>
                     As operações morfológicas são técnicas baseadas na teoria de conjuntos para processar imagens binárias ou escala de cinza, focadas na forma e estrutura dos objetos.
                 </p>
+                <image src="erodeVSdilate.jpg" alt="Erode vs Dilate" width="100%"></image>
                 <h3>Operações Básicas:</h3>
                 <ul>
                     <li><strong>Erosão:</strong> Remove pixels na borda de objetos, reduzindo o tamanho de regiões. É útil para eliminar ruído.</li>
@@ -122,6 +124,8 @@
                 <ul>
                     <li>
                         <strong>Filtros Espaciais:</strong>
+                        <br>
+                        <image src="gaussian.png" alt="Filtro Gaussiano" width="100%"></image>
                         <ul>
                             <li><strong>Filtro Média:</strong> Suaviza a imagem ao calcular a média dos valores dos pixels em uma janela. Reduz ruído, mas pode borrar detalhes.</li>
                             <li><strong>Filtro Mediana:</strong> Substitui o valor do pixel pelo valor mediano na vizinhança. É eficaz contra ruídos impulsivos.</li>
@@ -130,6 +134,8 @@
                     </li>
                     <li>
                         <strong>Filtros para Detecção de Bordas:</strong>
+                        <br>
+                        <image src="sobel.png" alt="Filtro de Sobel" width="100%" style="background-color: white;"></image>
                         <ul>
                             <li><strong>Sobel:</strong> Detecta bordas calculando gradientes em direções horizontais e verticais.</li>
                             <li><strong>Laplaciano:</strong> Detecta bordas ao realçar regiões onde há mudanças rápidas de intensidade.</li>
