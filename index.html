@@ -53,6 +53,7 @@
         <a href="#Brilho_GAMA">Brilho, contraste e Gama</a>
         <a href="#BLUR_INT">Blur integral</a>
         <a href="#BLUR_GAUSS">Blur gaussiano</a>
+        <a href="#Sobel">Filtro de Sobel</a>
 
         <br>
         <text class='index_title'>Tarefas:</text>
@@ -532,6 +533,78 @@ sharpened_img = equation_sharpe(imagem_gray , blurred_img )
             </div>
         </section>
 
+        <section id="Sobel">
+            <h2>Filtro de Sobel</h2>
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="codeBox5" class="codeBox">
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.image import imread
+
+def apply_sobel_filter(image):
+    """
+    Aplica o filtro de Sobel a uma imagem.
+    :param image: Imagem em escala de cinza como array numpy.
+    :return: Magnitude do gradiente após a aplicação do filtro de Sobel.
+    """
+    # Define os kernels de Sobel
+    sobel_x = np.array([[-1, 0, 1],
+                        [-2, 0, 2],
+                        [-1, 0, 1]])
+    sobel_y = np.array([[-1, -2, -1],
+                        [ 0,  0,  0],
+                        [ 1,  2,  1]])
+    
+    # Obtém as dimensões da imagem
+    h, w = image.shape
+    # Cria um array para armazenar o gradiente
+    gradient_x = np.zeros_like(image)
+    gradient_y = np.zeros_like(image)
+    
+    # Aplica o filtro de Sobel (evita bordas para simplificar)
+    for i in range(1, h-1):
+        for j in range(1, w-1):
+            region = image[i-1:i+2, j-1:j+2]
+            gradient_x[i, j] = np.sum(region * sobel_x)
+            gradient_y[i, j] = np.sum(region * sobel_y)
+    
+    # Calcula a magnitude do gradiente
+    magnitude = np.sqrt(gradient_x**2 + gradient_y**2)
+    magnitude = (magnitude / np.max(magnitude) * 255).astype(np.uint8)  # Normaliza para 0-255
+    
+    return magnitude
+
+# Carrega a imagem e converte para escala de cinza
+image = imread('caminho_para_sua_imagem.jpg')
+if image.ndim == 3:  # Caso seja RGB
+    image = np.mean(image, axis=2)
+
+# Aplica o filtro de Sobel
+sobel_result = apply_sobel_filter(image)
+
+# Mostra os resultados
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.title('Imagem Original')
+plt.imshow(image, cmap='gray')
+plt.axis('off')
+
+plt.subplot(1, 2, 2)
+plt.title('Filtro de Sobel')
+plt.imshow(sobel_result, cmap='gray')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+
+                
+                </textarea>
+                <button class="copyButton">Copiar</button>
+            </div>
+        </section>
+
+        
          
         <text class="titulo">Tarefas:</text>
          
