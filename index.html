@@ -185,7 +185,13 @@
                 <textarea id="codeBox3" class="codeBox">
 img = plt.imread("../imagens/imagem_a.jpg")
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
         <section id="Imagem_binaria">
@@ -206,7 +212,13 @@ def to_binary(image_gray, threshold=0.5):
     """
     return (image_gray > threshold).astype(np.uint8)
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
         <section id="Imagem_grayscale">
@@ -226,7 +238,13 @@ def to_grayscale(image):
     """
     return np.mean(image, axis=2)
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -247,7 +265,13 @@ for i in range(imagem_hex.shape[0]):
         M10 += (imagem_hex[i, j] * i)
 return M01 / M00, M10 / M00
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -266,7 +290,13 @@ for i in range(img.shape[0]):
         mu20 += (j - x) ** 2 * img[i, j]
 return mu11, mu02, mu20
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -280,7 +310,13 @@ return mu11, mu02, mu20
     theta = 0.5 * np.arctan2(2 * mu11, (mu20 - mu02))
     return np.degrees(theta) # Retorna a orientação em graus
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -298,7 +334,13 @@ return mu11, mu02, mu20
     # Desenhando a seta com plt.arrow
     plt.arrow(x, y, dx, dy, head_width=15, head_length=10, fc=cor, ec=cor)
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -324,7 +366,13 @@ return mu11, mu02, mu20
     excentricidade = np.sqrt(1 - (lambda2 / lambda1))
     return excentricidade
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
          
@@ -338,7 +386,13 @@ return mu11, mu02, mu20
 I_dilate = sc.binary_dilation(Img,structure = np.ones((5,5)))
 I_eroded = sc.binary_erosion(Img,structure = np.ones((9,9)))
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -351,7 +405,13 @@ I_dilate = sc.binary_dilation(Iseg,structure = np.ones((5,5)))
 I_eroded = sc.binary_erosion(I_dilate,structure = np.ones((9,9)))
 I_final = sc.binary_dilation(I_eroded,structure = np.ones((5,5)))
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -388,7 +448,13 @@ imagem = (imagem * 255).astype(np.uint8) #Scale back to [0, 255] and convert to 
 imagem_gama = (imagem_gama * 255).clip(0, 255).astype(np.uint8)
                 
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -462,7 +528,13 @@ integral_img  = integral_image(imagem_gray)
 blurred_img = blur(imagem_gray, integral_img ,30)
                 
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -529,7 +601,13 @@ blurred_img = gaussian(imagem_gray)
 sharpened_img = equation_sharpe(imagem_gray , blurred_img )
                 
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -600,7 +678,13 @@ plt.show()
 
                 
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -683,7 +767,13 @@ ax[3].axis('off')
 plt.tight_layout()
 plt.show()
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -791,7 +881,13 @@ plt.title("Imagem em GrayScale Cortada")
 plt.show()
 
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -1004,7 +1100,13 @@ plt.show()
 
 
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -1194,7 +1296,13 @@ plt.tight_layout()
 plt.show()
 
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button> 
             </div>
         </section>
 
@@ -1571,7 +1679,13 @@ filtered_centroid = filtrar_e_ordenar_centroid_com_KNN(num_images,images,M,centr
 centroides_reais = por_centroids_na_img_original(num_images,images,filtered_centroid)
 calibarar_camera(num_images,images,centroides_reais)
                 </textarea>
-                <button class="copyButton">Copiar</button>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
             </div>
         </section>
 
