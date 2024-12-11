@@ -156,8 +156,17 @@ textarea.codeBox:focus {
 }
 
 /* Botão de copiar com gradiente */
+
+button.copyButton .icon {
+    width: 16px; /* Ajuste o tamanho do ícone */
+    height: 16px;
+}
+
 button.copyButton {
     position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espaço entre o ícone e o texto */
     bottom: 15px;
     right: 15px;
     z-index: 10;
