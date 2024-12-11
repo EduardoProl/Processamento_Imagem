@@ -52,15 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const code = editors[index].getValue(); // Pega o valor do editor correspondente
             navigator.clipboard.writeText(code) // Copia o texto do editor
                 .then(() => {
-                    alert('Copiado!'); // Alerta de sucesso
+                    // Altera o texto do botão para "Copiado!"
+                    const originalText = button.textContent; // Salva o texto original do botão
+                    button.textContent = 'Copiado!'; // Define o texto para "Copiado!"
+                    
+                    // Voltar ao texto original após 2 segundos
+                    setTimeout(() => {
+                        button.textContent = originalText; // Restaura o texto original
+                    }, 2000);
                 })
                 .catch(err => {
                     console.error('Erro a copiar:', err); // Log de erro
                 });
         });
     });
-});
-
 
     // Evitar que links internos sejam adicionados ao histórico
     const noHistoryLinks = document.querySelectorAll('a[href^="#"]'); // Selecionar todos os links com âncoras
@@ -78,3 +83,4 @@ document.addEventListener('DOMContentLoaded', () => {
             history.replaceState(null, '', targetId);
         });
     });
+});
