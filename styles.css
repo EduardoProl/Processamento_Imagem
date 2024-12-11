@@ -246,4 +246,54 @@ h2{
     margin-top: 20px;
 }
 
+/* Estilos para a seção de teoria */
+#teoria {
+    text-align: justify;
+    line-height: 1.6; /* Melhora o espaçamento entre linhas */
+    margin: 20px auto; /* Centraliza a seção com espaçamento */
+    padding: 20px; /* Adiciona espaçamento interno */
+    width: 80%; /* Reduz a largura para facilitar a leitura */
+    background-color: #1e1e1e; /* Fundo que se mistura com o tema geral */
+    color: #e0e0e0; /* Cor do texto legível no fundo escuro */
+    border-radius: 10px; /* Bordas arredondadas para suavizar */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
+}
+
+/* Estilos para títulos dentro da teoria */
+#teoria h2, #teoria h3 {
+    color: #FFFFFF; /* Gradiente azul no tema */
+    margin-top: 20px; /* Espaço antes de títulos */
+    padding-bottom: 5px;
+    text-transform: uppercase; /* Para destaque */
+}
+
+/* Estilos para listas */
+#teoria ul {
+    margin-left: 20px; /* Distância das margens para melhor alinhamento */
+    list-style-type: disc; /* Marcadores padrão para listas */
+}
+
+#teoria li {
+    margin-bottom: 10px; /* Espaço entre itens */
+}
+
+/* Estilos para texto em negrito */
+#teoria strong {
+    color: #0072FF; /* Destaque em amarelo dourado */
+}
+
+/* Estilos para parágrafos */
+#teoria p {
+    margin-bottom: 15px; /* Espaço entre os parágrafos */
+}
+
+/* Ajuste de links (caso existam dentro da teoria) */
+#teoria a {
+    color: #FFFFFF; /* Combina com o tema azul */
+    text-decoration: none; /* Remove sublinhado */
+}
+
+#teoria a:hover {
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+}
 

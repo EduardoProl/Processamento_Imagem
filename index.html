@@ -61,6 +61,105 @@
     </div>
 
     <main>
+        <text class="titulo">Introdução Teórica</text>
+        <section id="teoria">
+            
+            <article>
+                <h2>1. Espaços de Cor</h2>
+                <p>
+                    Os <strong>espaços de cor</strong> são representações matemáticas que permitem descrever cores em imagens digitais. Cada espaço organiza as cores de forma diferente, dependendo da aplicação ou do sistema de captura e exibição.
+                </p>
+                <h3>Principais Espaços de Cor:</h3>
+                <ul>
+                    <li><strong>RGB (Red, Green, Blue):</strong> Modelo aditivo baseado em três componentes (vermelho, verde e azul). Amplamente usado em dispositivos digitais.</li>
+                    <li><strong>HSV (Hue, Saturation, Value):</strong> Modelo baseado na percepção humana de cor, separando tonalidade (cor), saturação (intensidade) e valor (brilho).</li>
+                    <li><strong>CMYK (Cyan, Magenta, Yellow, Black):</strong> Modelo subtrativo, usado em impressão.</li>
+                    <li><strong>YUV/YCrCb:</strong> Representa luminância (Y) e crominância (U e V ou Cr e Cb). É utilizado em compressão de vídeo e transmissão de sinais.</li>
+                    <li><strong>Lab:</strong> Modelo perceptualmente uniforme que separa a luz (L) dos componentes de cor (a e b).</li>
+                </ul>
+                <h3>Aplicações:</h3>
+                <ul>
+                    <li>Conversão entre espaços de cor (ex.: RGB para HSV) é útil em segmentação, ajuste de brilho/contraste e processamento orientado a cor.</li>
+                    <li>Melhorar a segmentação de objetos ao trabalhar com características como tonalidade (HSV) ou luminância (YUV).</li>
+                </ul>
+            </article>
+    
+            <article>
+                <h2>2. Operações Morfológicas</h2>
+                <p>
+                    As operações morfológicas são técnicas baseadas na teoria de conjuntos para processar imagens binárias ou escala de cinza, focadas na forma e estrutura dos objetos.
+                </p>
+                <h3>Operações Básicas:</h3>
+                <ul>
+                    <li><strong>Erosão:</strong> Remove pixels na borda de objetos, reduzindo o tamanho de regiões. É útil para eliminar ruído.</li>
+                    <li><strong>Dilatação:</strong> Adiciona pixels às bordas de objetos, expandindo regiões. Ajuda a preencher lacunas.</li>
+                    <li><strong>Abertura:</strong> Erosão seguida de dilatação. Remove pequenos objetos ou ruídos enquanto preserva a forma geral.</li>
+                    <li><strong>Fechamento:</strong> Dilatação seguida de erosão. Preenche lacunas pequenas e suaviza as bordas de objetos.</li>
+                    <li><strong>Gradiente Morfológico:</strong> Diferença entre a dilatação e a erosão. Realça as bordas dos objetos.</li>
+                </ul>
+                <h3>Aplicações:</h3>
+                <ul>
+                    <li>Segmentação de objetos.</li>
+                    <li>Remoção de ruído (ex.: "salt and pepper").</li>
+                    <li>Extração de bordas.</li>
+                </ul>
+            </article>
+    
+            <article>
+                <h2>3. Filtros</h2>
+                <p>
+                    Filtros são operações aplicadas a imagens para modificar ou extrair informações, como suavização, realce de bordas ou remoção de ruído.
+                </p>
+                <h3>Tipos de Filtros:</h3>
+                <ul>
+                    <li>
+                        <strong>Filtros Espaciais:</strong>
+                        <ul>
+                            <li><strong>Filtro Média:</strong> Suaviza a imagem ao calcular a média dos valores dos pixels em uma janela. Reduz ruído, mas pode borrar detalhes.</li>
+                            <li><strong>Filtro Mediana:</strong> Substitui o valor do pixel pelo valor mediano na vizinhança. É eficaz contra ruídos impulsivos.</li>
+                            <li><strong>Filtro Gaussiano:</strong> Aplica uma função gaussiana para suavizar a imagem, preservando transições suaves.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Filtros para Detecção de Bordas:</strong>
+                        <ul>
+                            <li><strong>Sobel:</strong> Detecta bordas calculando gradientes em direções horizontais e verticais.</li>
+                            <li><strong>Laplaciano:</strong> Detecta bordas ao realçar regiões onde há mudanças rápidas de intensidade.</li>
+                            <li><strong>Canny:</strong> Técnica robusta que combina suavização, gradiente e limiares para detectar bordas com alta precisão.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Filtros no Domínio da Frequência:</strong>
+                        <ul>
+                            <li>Usam transformadas como a <strong>Transformada de Fourier</strong> para aplicar filtros passa-baixa (suavização) ou passa-alta (realce de bordas) diretamente no espectro de frequências.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Aplicações:</h3>
+                <ul>
+                    <li>Redução de ruído em pré-processamento.</li>
+                    <li>Realce de características específicas, como bordas ou texturas.</li>
+                    <li>Segmentação e detecção de padrões.</li>
+                </ul>
+            </article>
+    
+            <article>
+                <h2>4. Outros Tópicos Relevantes</h2>
+                <h3>Transformações Geométricas:</h3>
+                <p>Incluem operações como translação, rotação, escalonamento e deformação. Usadas para alinhar ou ajustar imagens, como na criação de mosaicos e panoramas.</p>
+                <h3>Segmentação:</h3>
+                <p>Separação de uma imagem em regiões ou objetos. Métodos comuns incluem segmentação baseada em limiar (thresholding), segmentação por bordas e segmentação por agrupamento (clustering), como o algoritmo K-means.</p>
+                <h3>Equalização de Histograma:</h3>
+                <p>Técnica para melhorar o contraste ajustando a distribuição dos níveis de intensidade da imagem. Usada em imagens de baixa iluminação ou com contraste desigual.</p>
+                <h3>Detecção de Padrões e Objetos:</h3>
+                <p>Métodos baseados em características (ex.: contornos, texturas) ou aprendizado de máquina (redes neurais convolucionais, YOLO, etc.).</p>
+                <h3>Transformada de Hough:</h3>
+                <p>Utilizada para detecção de formas geométricas, como linhas e círculos, em imagens.</p>
+                <h3>Compressão:</h3>
+                <p>Métodos como JPEG e PNG para reduzir o tamanho de arquivos de imagem sem perder qualidade significativa (compressão com perdas ou sem perdas).</p>
+            </article>
+        </section>
+      
          
         <text class="titulo">Básico:</text>
          
