@@ -72,6 +72,8 @@
         <a href="#Exercicio4">Exercício 4 - Blobs/Contornos e Excentricidade</a>
         <a href="#Exercicio5">Exercício 5 - Leitura de Arucos</a>
         <a href="#Exercicio6_1">Exercicio 6.1 - Correção de perspectiva "à mão"</a>
+        <a href="#Exercicio6_2">Exercicio 6.2 - Correção de perspectiva automática</a>
+        <a href="#Exercicio6_3">Exercicio 6.3 - Correção de perspectiva automática com aspect-ratio automático</a>
         
         <br>
         <br>
@@ -2077,8 +2079,8 @@ imagem_original = plt.imread('monaLisa.png')
 pontos_original = np.float32([[722, 409], [874, 828], [1154, 760], [1000, 357]])
 
 # Calcular a largura e altura com base nos pontos
-largura = int(np.linalg.norm(pontos_original[2] - pontos_original[3]))  # Distância entre ponto 3 e 4
-altura = int(np.linalg.norm(pontos_original[1] - pontos_original[0]))   # Distância entre ponto 2 e 1
+largura = 500
+altura = 800
 
 # Ajustar os pontos de destino mantendo as proporções
 pontos_destino = np.float32([[0, 0], [0, altura], [largura, altura], [largura, 0]])
@@ -2111,6 +2113,192 @@ plt.show()
             <section id="teoria">
                 Output:
                 <img src='./images/output_exe_6_1.png' style="width : 100%">
+            </section>
+        </section>
+
+        <section id="Exercicio6_2">
+            <h2>Exercício 6.2</h2>
+            <section id="teoria">
+                <article>
+                    O código carrega uma imagem, converte-a para o espaço de cores HSV e cria uma máscara binária, onde áreas específicas de cor são destacadas com base em critérios definidos para matiz, saturação e valor. Em seguida, aplica operações morfológicas (delação e erosão) para melhorar a qualidade da máscara, removendo ruídos e ajustando as áreas de interesse. Com a máscara refinada, o código encontra os contornos da região relevante na imagem, selecionando o contorno de maior área. Esse contorno é então aproximado para uma forma mais simples, como um quadrado ou retângulo, utilizando a técnica de aproximação poligonal. Após isso, é calculado o retângulo delimitador ao redor da forma e ajustada a posição dos cantos para corresponder aos pontos corretos da imagem original. Finalmente, uma transformação de perspectiva é aplicada à imagem para "endireitar" a região de interesse, gerando uma versão retangular da área selecionada, que é visualizada lado a lado com a imagem original.    
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def distance(point1, point2):
+    return np.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
+
+
+img = (plt.imread("monalisa.png") * 255).astype(np.uint8)
+img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+img_bin = (
+    (img_hsv[:, :, 0] > 16)
+    & (img_hsv[:, :, 0] < 23)
+    & (img_hsv[:, :, 1] > 87)
+    & (img_hsv[:, :, 1] < 141)
+    & (img_hsv[:, :, 2] > 220)
+    & (img_hsv[:, :, 2] < 255)
+)
+
+kernel3 = np.ones((3, 3))
+img_bin = cv2.dilate((img_bin * 255).astype(np.uint8), kernel=kernel3, iterations=3)
+img_bin = cv2.erode(img_bin, kernel=kernel3, iterations=5)
+img_bin = cv2.dilate(img_bin, kernel=kernel3, iterations=5)
+
+
+contours, _ = cv2.findContours(img_bin, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+contour = sorted(contours, key=cv2.contourArea, reverse=True)[1]
+epsilon = 0.05 * cv2.arcLength(contour, True)
+approx = cv2.approxPolyDP(contour, epsilon, True)
+
+approx = approx.reshape((4, 2))
+
+x, y, w, h = cv2.boundingRect(approx)
+bounding = [(x, y), (x + w, y), (x, y+h), (x + w, y + h)]
+src_points = []
+src_points_dst = [float("inf")]*4
+
+for i, b in enumerate(bounding):
+    for canto in approx:
+        if (dst:=distance(b, canto)) < src_points_dst[i]:
+            if len(src_points) != i:
+                src_points[-1] = canto
+            else:
+                src_points.append(canto)
+            src_points_dst[i] = dst
+
+src_points = np.array(src_points, dtype="float32")
+dst_points = np.array([[0, 0], [500, 0], [0, 800], [500, 800]], dtype="float32")
+matriz_formacao = cv2.getPerspectiveTransform(src_points, dst_points)
+transformed_img = cv2.warpPerspective(img, matriz_formacao, (500,800))
+
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.title("Imagem Original")
+plt.imshow(img)
+plt.subplot(1, 2, 2)
+plt.imshow(transformed_img)
+plt.title("Imagem Cortada")
+plt.show()
+
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+            <section id="teoria">
+                Output:
+                <img src='./images/output_exe_6_2.png' style="width : 100%">
+            </section>
+        </section>
+
+        <section id="Exercicio6_3">
+            <h2>Exercício 6.3</h2>
+            <section id="teoria">
+                <article>
+                    O código começa por carregar uma imagem e convertê-la para o espaço de cores HSV para facilitar a segmentação de cores. Depois, ele cria uma máscara binária, onde áreas específicas da imagem que correspondem a certos critérios de cor são destacadas. Essa máscara passa por algumas operações de dilatação e erosão para melhorar a definição das regiões de interesse e eliminar ruídos. Em seguida, o código detecta os contornos na imagem e seleciona o maior contorno, que é então aproximado para um polígono com quatro lados. A partir dessa aproximação, o código calcula os limites da região e ajusta os pontos de destino para uma transformação de perspectiva. Essa transformação é aplicada à imagem original para "endireitar" a área de interesse, gerando uma versão retangular dessa região. Por fim, o código exibe a imagem original e a imagem transformada lado a lado.
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def distance(point1, point2):
+    return np.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
+
+
+img = (plt.imread("monalisa.png") * 255).astype(np.uint8)
+img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+img_bin = (
+    (img_hsv[:, :, 0] > 16)
+    & (img_hsv[:, :, 0] < 23)
+    & (img_hsv[:, :, 1] > 87)
+    & (img_hsv[:, :, 1] < 141)
+    & (img_hsv[:, :, 2] > 220)
+    & (img_hsv[:, :, 2] < 255)
+)
+
+kernel3 = np.ones((3, 3))
+img_bin = cv2.dilate((img_bin * 255).astype(np.uint8), kernel=kernel3, iterations=3)
+img_bin = cv2.erode(img_bin, kernel=kernel3, iterations=5)
+img_bin = cv2.dilate(img_bin, kernel=kernel3, iterations=5)
+
+
+contours, _ = cv2.findContours(img_bin, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+contour = sorted(contours, key=cv2.contourArea, reverse=True)[1]
+epsilon = 0.05 * cv2.arcLength(contour, True)
+approx = cv2.approxPolyDP(contour, epsilon, True)
+
+approx = approx.reshape((4, 2))
+
+x, y, w, h = cv2.boundingRect(approx)
+bounding = [(x, y), (x + w, y), (x, y+h), (x + w, y + h)]
+src_points = []
+src_points_dst = [float("inf")]*4
+
+for i, b in enumerate(bounding):
+    for canto in approx:
+        if (dst:=distance(b, canto)) < src_points_dst[i]:
+            if len(src_points) != i:
+                src_points[-1] = canto
+            else:
+                src_points.append(canto)
+            src_points_dst[i] = dst
+
+src_points = np.array(src_points, dtype="float32")
+
+# Calcular a largura e altura com base nos pontos
+largura = int(np.linalg.norm(src_points[2] - src_points[3]))  # Distância entre ponto 3 e 4
+altura = int(np.linalg.norm(src_points[1] - src_points[0]))   # Distância entre ponto 2 e 1
+
+# Ajustar os pontos de destino mantendo as proporções
+pontos_destino = np.float32([[0, 0],[largura, 0],[0, altura] , [largura, altura]])
+
+matriz_formacao = cv2.getPerspectiveTransform(src_points, pontos_destino)
+transformed_img = cv2.warpPerspective(img, matriz_formacao, (largura,altura))
+
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.title("Imagem Original")
+plt.imshow(img)
+plt.subplot(1, 2, 2)
+plt.imshow(transformed_img)
+plt.title("Imagem Cortada")
+plt.show()
+
+
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+            <section id="teoria">
+                Output:
+                <img src='./images/output_exe_6_3.png' style="width : 100%">
             </section>
         </section>
 
