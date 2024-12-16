@@ -63,6 +63,16 @@
         <a href="#Filtros">Filtros</a>
         <a href="#Arucos">Arucos</a>
         <a href="#Calibrar_Camera">Calibrar Camera</a>
+
+        <br>
+        <text class='index_title'>Exercício para Teste</text>
+        <a href="#Exercicio1">Exercício 1 - GrayScale</a>
+        <a href="#Exercicio2">Exercício 2 - Segmentação por cor</a>
+        <a href="#Exercicio3">Exercício 3 - Segmentação por cor (HSV)</a>
+        <a href="#Exercicio4">Exercício 4 - Blobs/Contornos e Excentricidade</a>
+        <a href="#Exercicio5">Exercício 5 - Leitura de Arucos</a>
+        <a href="#Exercicio6_1">Exercicio 6.1 - Correção de perspectiva "à mão"</a>
+        
         <br>
         <br>
         <br>
@@ -1687,6 +1697,421 @@ calibarar_camera(num_images,images,centroides_reais)
                     <span>Copiar Código</span>
                 </button>                
             </div>
+        </section>
+
+        <text class="titulo">Exercícios de Treino para o Teste:</text>
+
+        <section id="Exercicio1">
+            <h2>Exercício 1</h2>
+            <section id="teoria">
+                <article>
+                    O código começa por carregar uma imagem a partir de um ficheiro JPEG utilizando a função `plt.imread("imagem.jpeg")` e armazena os dados dessa imagem na variável `image`. A seguir, a imagem é convertida para escala de cinza através da operação `np.mean(image, axis=2)`, que calcula a média dos valores das cores ao longo do eixo 2 (RGB). Após a conversão, a imagem original e a imagem em escala de cinza são apresentadas lado a lado utilizando a biblioteca `matplotlib`. A imagem em escala de cinza é exibida com o mapa de cores "gray", o que a torna visível em tons de cinza.
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+"""
+Exercicio 1 :
+    --> Carregar uma imagem
+    --> Converter a imagem para escala de cinza
+    --> Mostrar a imagem
+"""
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+image = plt.imread("imagem.jpeg")
+imagem_pb = np.mean(image, axis=2)
+                
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.title("Imagem Original")
+plt.imshow(image)
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_pb, cmap="gray")
+plt.title("Imagem em GrayScale")
+
+plt.show()
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+
+            <section id="teoria">
+                Output:
+                <img src='./images/output_exe_1.png' style="width : 100%">
+            </section>
+        </section>
+
+
+        <section id="Exercicio2">
+            <h2>Exercício 2</h2>
+            <section id="teoria">
+                <article>
+                    O código começa por carregar uma imagem a partir de um ficheiro JPEG utilizando a função `plt.imread("imagem_2.jpeg")`, normalizando os valores dos pixels dividindo por 255 para que fiquem no intervalo de 0 a 1. Em seguida, é realizada a segmentação da imagem com base na cor, criando uma máscara binária chamada `imagem_verde`, onde a condição especificada verifica se o valor do componente vermelho (R) é menor que 0.6, o valor do componente verde (G) é maior que 0.4 e o valor do componente azul (B) é menor que 0.6. A operação `astype(int)` converte o resultado da expressão booleana para 0s e 1s, gerando uma imagem binária. Finalmente, a imagem original e a imagem binária resultante da segmentação são exibidas lado a lado usando `matplotlib`, com títulos apropriados para cada uma.
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+""" 
+Exercicio 2:
+    --> Carregar uma imagem
+    --> Segmentar por côr
+    --> Mostrar imagem binária
+"""
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+image = plt.imread("imagem_2.jpeg")/255
+imagem_verde = ((image[:,:,0]<0.6)*(image[:,:,1]>0.4)*(image[:,:,2]<0.6)).astype(int)
+
+            
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.title("Imagem Original")
+plt.imshow(image)
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_verde)
+plt.title("Imagem Verde")
+
+plt.show()
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+            <section id="teoria">
+                Output:
+                <img src='./images/output_exe_2.png' style="width : 100%">
+            </section>
+        </section>
+
+
+        <section id="Exercicio3">
+            <h2>Exercício 3</h2>
+            <section id="teoria">
+                <article>
+                    O código começa por carregar uma imagem a partir de um ficheiro JPEG utilizando a função `cv2.imread('imagem_2.jpeg')`. Em seguida, a imagem é convertida do espaço de cor BGR (utilizado pelo OpenCV) para o espaço HSV (matiz, saturação e valor) com a função `cv2.cvtColor(I, cv2.COLOR_BGR2HSV)`. Após a conversão, é realizada a segmentação da imagem para identificar áreas com predominância da cor verde, utilizando uma condição baseada nos valores dos canais B (azul), G (verde) e R (vermelho) no espaço BGR. A condição `((I[:,:,0]<150)*(I[:,:,1]>100)*(I[:,:,2]<150))` cria uma máscara binária, onde os pixels que satisfazem essas condições são marcados como 1 e os outros como 0. Finalmente, o código exibe três imagens lado a lado: a imagem original, a imagem convertida para o espaço HSV e a imagem binária resultante da segmentação verde.
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+""" 
+Exercicio 3:
+    --> Carregar uma imagem
+    --> Segmentar por côr (no espaço HSV)
+    --> Mostrar imagem binária
+"""
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+I = cv2.imread('imagem_2.jpeg')
+hsv = cv2.cvtColor(I, cv2.COLOR_BGR2HSV)
+
+hsv_verde = ((I[:,:,0]<150)*(I[:,:,1]>100)*(I[:,:,2]<150)).astype(int)
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 3, 1)
+plt.title("Imagem Original")
+plt.imshow(I)
+plt.subplot(1, 3, 2)
+plt.imshow(hsv)
+plt.title("Imagem HSV")
+plt.subplot(1, 3, 3)
+plt.imshow(hsv_verde)
+plt.title("Imagem HSV verde")
+
+plt.show()
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+            <section id="teoria">
+                Output:
+                <img src='./images/output_exe_3.png' style="width : 100%">
+            </section>
+        </section>
+
+        <section id="Exercicio4">
+            <h2>Exercício 4</h2>
+            <section id="teoria">
+                <article>
+                    O código começa por carregar uma imagem de um parafuso a partir de um ficheiro PNG utilizando `plt.imread("parafuso.png")`. Em seguida, é realizada a segmentação da imagem com base nos valores dos pixels, considerando os pixels escuros (valores de cor abaixo de 0.9) como objetos, criando uma imagem binária chamada `imagem_segmentada`. Após a segmentação, o código utiliza a função `cv2.connectedComponentsWithStats` para identificar e rotular os componentes conectados na imagem, ou seja, os objetos segmentados. A seguir, calcula-se a excentricidade de cada componente através de seus momentos geométricos e da matriz de covariância, o que permite distinguir os parafusos de outros objetos com base na forma.
+<br>
+A excentricidade é usada para classificar os objetos, e é definido um limiar (0.8) para classificar os componentes com excentricidade superior a esse valor como "parafusos". Os rótulos dos parafusos detectados são armazenados em uma lista chamada `parafusos`. O código então exibe o número total de componentes e os rótulos dos parafusos identificados.
+<br>
+Finalmente, a segmentação é visualizada com a imagem original e a imagem resultante, onde os parafusos detectados são destacados em vermelho. Este processo inclui uma etapa opcional de operações morfológicas (não incluídas no código, mas mencionadas no enunciado).
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+"""
+Exercicio 4:
+    --> Carregar uma imagem
+    --> Segmentar Imagem
+    --> (opcional) Op. Morfológicas
+    --> Contar Blobs/Contornos
+    --> Separar parafusos
+"""
+
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Carregar imagem
+image = plt.imread("parafuso.png")
+
+# Segmentação da imagem (considerando pixels escuros como objetos)
+imagem_segmentada = ((image[:, :, 0] < 0.9) * (image[:, :, 1] < 0.9) * (image[:, :, 2] < 0.9)).astype(np.uint8)
+
+# Encontrar componentes conectados
+num_features, labels, stats, centroids = cv2.connectedComponentsWithStats(imagem_segmentada)
+
+# Lista para armazenar excentricidade de cada componente
+excentricidades = []
+
+for label in range(1, num_features):  # Ignorar o fundo (label 0)
+    # Criar máscara para o label atual
+    mask = (labels == label).astype(np.uint8)
+
+    # Calcular momentos
+    moments = cv2.moments(mask)
+
+    # Calcular matriz de covariância
+    if moments["m00"] > 0:  # Evitar divisão por zero
+        x_central = moments["m10"] / moments["m00"]
+        y_central = moments["m01"] / moments["m00"]
+
+        # Segunda ordem centralizada
+        mu20 = moments["mu20"] / moments["m00"]
+        mu02 = moments["mu02"] / moments["m00"]
+        mu11 = moments["mu11"] / moments["m00"]
+
+        # Autovalores da matriz de covariância
+        cov_matrix = np.array([[mu20, mu11], [mu11, mu02]])
+        eigvals, _ = np.linalg.eig(cov_matrix)
+        
+        # Ordenar autovalores (lambda_1 >= lambda_2)
+        eigvals = sorted(eigvals, reverse=True)
+
+        # Calcular excentricidade
+        if eigvals[1] > 0:  # Garantir autovalor positivo
+            excentricidade = np.sqrt(1 - (eigvals[1] / eigvals[0]))
+        else:
+            excentricidade = 1  # Caso degenerado (linha ou ponto)
+
+        excentricidades.append((label, excentricidade))
+
+# Definir limiar para classificar como parafusos (ex: excentricidade > 0.8)
+limiar_excentricidade = 0.8
+parafusos = [label for label, excentricidade in excentricidades if excentricidade > limiar_excentricidade]
+
+# Exibir resultados
+print(f"Número total de componentes: {num_features - 1}")
+print(f"Parafusos detectados (labels): {parafusos}")
+
+# Visualizar a segmentação e destacar parafusos
+output_image = np.zeros_like(image)
+for label in parafusos:
+    output_image[labels == label] = [255, 0, 0]  # Colorir parafusos em vermelho
+
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.title("Imagem Original")
+plt.imshow(image)
+plt.axis("off")
+
+plt.subplot(1, 2, 2)
+plt.title("Parafusos Detectados")
+plt.imshow(output_image)
+plt.axis("off")
+plt.show()
+
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+            <section id="teoria">
+                Output:
+                <br>
+                Número total de componentes: 4
+                <br>
+                Parafusos detectados (labels): [1, 2]
+                <br>
+
+
+                <img src='./images/output_exe_4.png' style="width : 100%">
+            </section>
+        </section>
+
+        <section id="Exercicio5">
+            <h2>Exercício 5</h2>
+            <section id="teoria">
+                <article>
+                    O código começa por carregar uma imagem chamada `aruco.png` usando `plt.imread()`. Em seguida, cria uma máscara binária, `I_seg`, que segmenta a imagem com base nos valores das cores (verificando se as componentes RGB de cada pixel são iguais a 1, o que indica um pixel branco). A segmentação resulta em uma imagem binária onde os pixels brancos são representados por 1 e os outros por 0.
+<br>
+O código calcula as dimensões da imagem (altura e largura) e define a altura e a largura das células (ou blocos) que serão analisadas, dividindo a altura e a largura da imagem em 8 partes (`step_y` e `step_x`). Em seguida, percorre a imagem em uma grade, começando de um ponto central dentro de cada bloco (usando um deslocamento de metade do tamanho do bloco) e coleta os valores binários (0 ou 1) para cada célula, armazenando-os na lista `codigo`.
+<br>
+A lista `codigo`, que contém os valores extraídos de cada célula, é então impressa no terminal e também exibida no título da imagem, para mostrar o código extraído da imagem.
+<br>
+Por fim, a imagem original é exibida com o título indicando o código extraído, onde os valores de `codigo` são apresentados sem vírgulas entre os elementos.
+<br>
+Este processo pode ser utilizado para extrair padrões binários de uma imagem, como um código binário presente em um marcador ArUco, por exemplo.
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Dec 16 12:35:25 2024
+
+@author: JoaoMaria
+
+Obrigado Gil :)
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+I = plt.imread("aruco.png")
+
+I_seg = ((I[...,0]==1)*(I[...,1]==1)*(I[...,2]==1)).astype(int)
+
+height, width = I_seg.shape
+
+step_y = height // 8
+step_x = width // 8
+
+codigo = []
+
+for i in range(step_y + step_y//2, height-step_y, step_y):
+    for j in range(step_x + step_x//2, width-step_x, step_x):
+        codigo.append(I_seg[i,j])
+        
+print(codigo)
+plt.imshow(I)
+plt.title(f'Código extraido : \n {str(codigo).replace(',', '')}')
+plt.show()
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+            <section id="teoria">
+                Output:
+                <img src='./images/output_exe_5.png' style="width : 100%">
+            </section>
+        </section>
+
+        <section id="Exercicio6_1">
+            <h2>Exercício 6.1</h2>
+            <section id="teoria">
+                <article>
+                    Este código começa por carregar a imagem "monaLisa.png" usando `plt.imread()`. Em seguida, define manualmente quatro pontos da imagem original (`pontos_original`) que serão usados para calcular a transformação de perspectiva. A largura e a altura da nova imagem são calculadas com base nas distâncias entre os pontos 3 e 4 (para a largura) e entre os pontos 1 e 2 (para a altura). Após isso, os pontos de destino (`pontos_destino`) são definidos, representando o novo quadrilátero para o qual a imagem será transformada, mantendo as proporções da área selecionada.
+<br>
+A função `cv2.getPerspectiveTransform` é utilizada para calcular a matriz de transformação perspectiva (M) a partir dos pontos originais e de destino. Esta matriz é então aplicada à imagem original com a função `cv2.warpPerspective`, resultando em uma nova imagem que exibe apenas a região correspondente ao quadrilátero definido pelos pontos originais. A imagem original e a imagem transformada (cortada) são exibidas lado a lado usando `matplotlib`.
+<br>
+Este processo é útil para recortar e corrigir a perspectiva de uma área específica de uma imagem, como uma forma de "destransformar" uma parte de uma imagem para que ela fique em uma vista ortogonal.
+                </article>
+            </section>
+            
+            
+            <div class="code-container">
+                <!-- Alterado para textarea -->
+                <textarea id="Exe1" class="codeBox">
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Carregar imagem
+imagem_original = plt.imread('monaLisa.png')
+
+# Converter para escala de cinza (como no seu exemplo)
+#gray = 0.3 * imagem_original[..., 0] + 0.5 * imagem_original[..., 1] + 0.2 * imagem_original[..., 2]
+
+# Definir os pontos da imagem original (manualmente)
+pontos_original = np.float32([[722, 409], [874, 828], [1154, 760], [1000, 357]])
+
+# Calcular a largura e altura com base nos pontos
+largura = int(np.linalg.norm(pontos_original[2] - pontos_original[3]))  # Distância entre ponto 3 e 4
+altura = int(np.linalg.norm(pontos_original[1] - pontos_original[0]))   # Distância entre ponto 2 e 1
+
+# Ajustar os pontos de destino mantendo as proporções
+pontos_destino = np.float32([[0, 0], [0, altura], [largura, altura], [largura, 0]])
+
+# Obter a matriz de transformação perspectiva
+M = cv2.getPerspectiveTransform(pontos_original, pontos_destino)
+
+# Aplicar a transformação perspectiva
+out = cv2.warpPerspective(imagem_original, M, (largura, altura), flags=cv2.INTER_LINEAR)
+
+plt.figure(figsize=(12, 4))
+plt.subplot(1, 2, 1)
+plt.title("Imagem Original")
+plt.imshow(imagem_original)
+plt.subplot(1, 2, 2)
+plt.imshow(out)
+plt.title("Imagem Cortada")
+
+plt.show()
+
+                </textarea>
+                <button class="copyButton">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar Código</span>
+                </button>                
+            </div>
+            <section id="teoria">
+                Output:
+                <img src='./images/output_exe_6_1.png' style="width : 100%">
+            </section>
         </section>
 
     </main>
