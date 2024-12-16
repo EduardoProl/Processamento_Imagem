@@ -1834,7 +1834,7 @@ import matplotlib.pyplot as plt
 I = cv2.imread('imagem_2.jpeg')
 hsv = cv2.cvtColor(I, cv2.COLOR_BGR2HSV)
 
-hsv_verde = ((I[:,:,0]<150)*(I[:,:,1]>100)*(I[:,:,2]<150)).astype(int)
+hsv_verde = ((hsv[:,:,0]<40)*(hsv[:,:,0]>20)*(hsv[:,:,1]>200)*(hsv[:,:,2]>220)).astype(int)
 
 plt.figure(figsize=(12, 4))
 plt.subplot(1, 3, 1)
@@ -1859,7 +1859,7 @@ plt.show()
             </div>
             <section id="teoria">
                 Output:
-                <img src='./images/output_exe_3.png' style="width : 100%">
+                <img src='./images/output_exe_3_corrigido.png' style="width : 100%">
             </section>
         </section>
 
