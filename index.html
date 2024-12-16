@@ -2221,10 +2221,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 def distance(point1, point2):
     return np.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
-
 
 img = (plt.imread("monalisa.png") * 255).astype(np.uint8)
 img_hsv = cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
@@ -2241,7 +2239,6 @@ kernel3 = np.ones((3, 3))
 img_bin = cv2.dilate((img_bin * 255).astype(np.uint8), kernel=kernel3, iterations=3)
 img_bin = cv2.erode(img_bin, kernel=kernel3, iterations=5)
 img_bin = cv2.dilate(img_bin, kernel=kernel3, iterations=5)
-
 
 contours, _ = cv2.findContours(img_bin, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 contour = sorted(contours, key=cv2.contourArea, reverse=True)[1]
@@ -2273,10 +2270,21 @@ altura = int(np.linalg.norm(src_points[1] - src_points[0]))   # Distância entre
 # Ajustar os pontos de destino mantendo as proporções
 pontos_destino = np.float32([[0, 0],[largura, 0],[0, altura] , [largura, altura]])
 
+# Matriz de transformação de perspectiva
 matriz_formacao = cv2.getPerspectiveTransform(src_points, pontos_destino)
 transformed_img = cv2.warpPerspective(img, matriz_formacao, (largura,altura))
 
+# Para ajustar o aspect ratio para uma perspectiva cônica, calculamos a inversa da transformação
+inverse_matrix = cv2.getPerspectiveTransform(pontos_destino, src_points)
 
+# Aplicamos a inversa aos pontos do retângulo para "corrigir" a distorção da perspectiva
+corrected_points = cv2.perspectiveTransform(np.array([pontos_destino], dtype='float32'), inverse_matrix)[0]
+
+# Recalcular a largura e altura a partir dos pontos corrigidos
+corrected_largura = int(np.linalg.norm(corrected_points[2] - corrected_points[3]))
+corrected_altura = int(np.linalg.norm(corrected_points[1] - corrected_points[0]))
+
+# Exibir a imagem original e transformada
 plt.figure(figsize=(12, 4))
 plt.subplot(1, 2, 1)
 plt.title("Imagem Original")
@@ -2285,6 +2293,9 @@ plt.subplot(1, 2, 2)
 plt.imshow(transformed_img)
 plt.title("Imagem Cortada")
 plt.show()
+
+print(f"Largura estimada (considerando perspectiva cônica): {corrected_largura}")
+print(f"Altura estimada (considerando perspectiva cônica): {corrected_altura}")
 
 
                 </textarea>
